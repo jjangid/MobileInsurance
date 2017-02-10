@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" guice-stage="DEVELOPMENT" verbose="0" name="Failed suite [Suite]" parallel="tests">
+  <listeners>
+    <listener class-name="mob_insurance.listeners.TestSuitListener"/>
+  </listeners>
+  <test name="MI_Test_Cycle_1(failed)" parallel="tests">
+    <parameter name="browser" value="chrome"/>
+    <classes>
+      <class name="mob_insurance.scripts.AgentSettingUploadFile">
+        <methods>
+          <include name="tearDown"/>
+          <include name="init"/>
+          <include name="BeforeExecution"/>
+          <include name="AgentSettingUploadFileTest"/>
+          <include name="tearDownAfterSuit"/>
+        </methods>
+      </class> <!-- mob_insurance.scripts.AgentSettingUploadFile -->
+    </classes>
+  </test> <!-- MI_Test_Cycle_1(failed) -->
+</suite> <!-- Failed suite [Suite] -->
