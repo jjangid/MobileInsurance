@@ -172,10 +172,7 @@ public class ManageInsuranceField {
 			while(itrElementName.hasNext()){
 				Row row=sheet.createRow(rowIndex);
 				String keyTabElementName=itrElementName.next();
-//				if(keyElementName.equalsIgnoreCase("deckungssumme")){
-//					System.out.println("");
-//				}
-				FieldInfo objFieldInfo=mapFieldInfo.get(keyTabElementName);
+    			FieldInfo objFieldInfo=mapFieldInfo.get(keyTabElementName);
 				String fieldName=getFieldName(mapFieldInfo,objFieldInfo);
 				//Needs to write: Logic to prepare row includes values for Insurance Type / Field Name / Element Type
 				row.createCell(0).setCellValue(keyInsuranceType);
@@ -184,6 +181,7 @@ public class ManageInsuranceField {
 //				row.createCell(2).setCellValue(objFieldInfo.fieldTitle);
 				row.createCell(3).setCellValue(fieldName);
 				row.createCell(4).setCellValue(objFieldInfo.fieldType);
+				
 				appendInsuranceFieldLocatorInProperty(keyInsuranceType+"."+objFieldInfo.fieldName,objFieldInfo.fieldType,objFieldInfo.tab,fieldName,objFieldInfo.fieldName);
 				rowIndex++;
 			}
@@ -212,9 +210,12 @@ public class ManageInsuranceField {
 	} 
 	
 	private void appendInsuranceFieldLocatorInProperty(String key,String type,String tabName, String... value){
-	  if(!tabName.equals("")){
-		  return;
-	  }
+	
+//	  Exclude field if tab name is blank	
+//	  if(!tabName.equals("")){
+//		  return;
+//	  }
+		
 	  // value[0]: fieldTitle || value[1]: fieldName	
 	  String prValue="";
 	  String[] locator;
@@ -249,7 +250,8 @@ public class ManageInsuranceField {
 	  		              return;
   	  }
 	  
-	  prInsuranceFieldLocator.put(key.toUpperCase(), prValue);
+	  prInsuranceFieldLocator.put(key.toUpperCase()+"_EN", prValue);
+	  prInsuranceFieldLocator.put(key.toUpperCase()+"_DE", prValue);
 		
 	} 
 
