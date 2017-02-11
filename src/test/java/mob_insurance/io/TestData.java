@@ -105,17 +105,20 @@ public class TestData {
 				objInsuranceField.fieldName=cRow.getCell(2).getStringCellValue();
 				String insuranceField=cRow.getCell(2).getStringCellValue();	
 				String fieldValue="";
-				if(cRow.getCell(cellRef.getCol()).getCellType() == Cell.CELL_TYPE_STRING){
-					fieldValue= cRow.getCell(cellRef.getCol()).getStringCellValue();
-				}else if(cRow.getCell(cellRef.getCol()).getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cRow.getCell(cellRef.getCol()))){
+				Cell cCell=cRow.getCell(cellRef.getCol());
+				if(cCell == null)
+					fieldValue="";
+				else if(cCell.getCellType() == Cell.CELL_TYPE_STRING){
+					fieldValue= cCell.getStringCellValue();
+				}else if(cCell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cCell)){
 					SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy");
-					fieldValue=df.format(cRow.getCell(cellRef.getCol()).getDateCellValue());
-				}else if(cRow.getCell(cellRef.getCol()).getCellType() == Cell.CELL_TYPE_NUMERIC){
-					fieldValue=String.valueOf(cRow.getCell(cellRef.getCol()).getNumericCellValue());
-				}else if(cRow.getCell(cellRef.getCol()).getCellType() == Cell.CELL_TYPE_BOOLEAN){
-					fieldValue=String.valueOf(cRow.getCell(cellRef.getCol()).getBooleanCellValue());
+					fieldValue=df.format(cCell.getDateCellValue());
+				}else if(cCell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+					fieldValue=String.valueOf(cCell.getNumericCellValue());
+				}else if(cCell.getCellType() == Cell.CELL_TYPE_BOOLEAN){
+					fieldValue=String.valueOf(cCell.getBooleanCellValue());
 				}
-				objInsuranceField.testDataValue=fieldValue;
+				objInsuranceField.testDataValue=fieldValue.trim();
 				objInsuranceField.fieldTitle=cRow.getCell(3).getStringCellValue();
 				objInsuranceField.fieldType=cRow.getCell(4).getStringCellValue();
 				

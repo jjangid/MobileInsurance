@@ -168,7 +168,7 @@ public class CoreRepository extends TestBase {
 					value = lang.equalsIgnoreCase("DE") ? "Anlegen" :"Create";
 					break;
 				case "Edit":
-					value = lang.equalsIgnoreCase("DE") ? "Ändern" :"Edit";
+					value = lang.equalsIgnoreCase("DE") ? "ï¿½ndern" :"Edit";
 					break;
 				case "Save":
 					value = lang.equalsIgnoreCase("DE") ? "Speichern" :"Save";
@@ -180,7 +180,7 @@ public class CoreRepository extends TestBase {
 					value = lang.equalsIgnoreCase("DE") ? "Keine Daten vorhanden" :"No data to display";
 					break;
 				case "Delete":
-					value = lang.equalsIgnoreCase("DE") ? "Löschen" :"Delete";
+					value = lang.equalsIgnoreCase("DE") ? "Lï¿½schen" :"Delete";
 					break;
 				case "Send":
 					value = lang.equalsIgnoreCase("DE") ? "Senden" :"Send";
@@ -672,9 +672,9 @@ public class CoreRepository extends TestBase {
 	    	WebElement wElement=null;
 	    	switch(objInsuranceField.fieldType.toLowerCase()){
 	    	  case "combobox":
-	    		              wElement=this.findElement(locator[0],locator[1]);
-	    		              testResult[0]="Choose "+objInsuranceField.fieldTitle+" as "+objInsuranceField.testDataValue+".";
-	    		              locator=ManageLocator.getLocator("Create.Contract.ContractFeature.Dropdown.Option");
+				    		  wElement=this.findElement(locator[0],locator[1]);
+				              testResult[0]="Choose "+objInsuranceField.fieldTitle+" as "+objInsuranceField.testDataValue+".";
+				              locator=ManageLocator.getLocator("Create.Contract.ContractFeature.Dropdown.Option");
 	    		              wElement.click();
 	    		              locator[1]=locator[1].replaceAll("@optionText", objInsuranceField.testDataValue);    		              
 	    		              WebElement eleDWOption=this.findElement(locator[0],locator[1]);
@@ -688,8 +688,8 @@ public class CoreRepository extends TestBase {
 	    		              wElement=this.findElement(locator[0],locator[1]);
 	    		              testResult[0]="Enter "+objInsuranceField.fieldTitle+" as "+objInsuranceField.testDataValue+".";
 	    		              wElement.clear();
-		    		          wElement.sendKeys(objInsuranceField.testDataValue);
-		    		          testResult[1]="Passed";
+	    		              wElement.sendKeys(objInsuranceField.testDataValue);	    		            	 
+	    		              testResult[1]="Passed";
 		    		          break;
 	    	  case "checkbox":
 	    		              wElement=this.findElement(locator[0],locator[1]);

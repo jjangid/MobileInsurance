@@ -418,9 +418,9 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
-       		String namefirst =String.valueOf(testData[7]);
-    		String namelast =String.valueOf(testData[8]);
-    		String email =String.valueOf(testData[20]);
+//       	String namefirst =String.valueOf(testData[7]);
+//    		String namelast =String.valueOf(testData[8]);
+//    		String email =String.valueOf(testData[20]);
     		String fd_relation =String.valueOf(testData[42]);
     		String fd_salutation =String.valueOf(testData[43]);
     		String fd_title =String.valueOf(testData[44]);
@@ -558,9 +558,9 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
-       		String namefirst =String.valueOf(testData[7]);
-    		String namelast =String.valueOf(testData[8]);
-    		String email =String.valueOf(testData[20]);
+//       	String namefirst =String.valueOf(testData[7]);
+//    		String namelast =String.valueOf(testData[8]);
+//    		String email =String.valueOf(testData[20]);
     		String pd_profession =String.valueOf(testData[51]);
     		String pd_jobtype =String.valueOf(testData[52]);
 			String pd_physicalperc =String.valueOf(testData[54]);
@@ -659,9 +659,9 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
-       		String namefirst =String.valueOf(testData[7]);
-    		String namelast =String.valueOf(testData[8]);
-    		String email =String.valueOf(testData[20]);
+//       	String namefirst =String.valueOf(testData[7]);
+//    		String namelast =String.valueOf(testData[8]);
+//    		String email =String.valueOf(testData[20]);
     		String jd_employer =String.valueOf(testData[68]);
 			String jd_contact = String.valueOf(testData[69]);
     		String jd_street =String.valueOf(testData[70]);
@@ -743,15 +743,15 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
-       		String namefirst =String.valueOf(testData[7]);
-    		String namelast =String.valueOf(testData[8]);
-    		String email =String.valueOf(testData[20]);
+//       	String namefirst =String.valueOf(testData[7]);
+//    		String namelast =String.valueOf(testData[8]);
+//    		String email =String.valueOf(testData[20]);
     		String rd_weight =String.valueOf(testData[76]);
     		String rd_height =String.valueOf(testData[77]);
     		String rd_smoker =String.valueOf(testData[78]);
     		String rd_healthinfo =String.valueOf(testData[79]);
-    		String rd_type =String.valueOf(testData[80]);
-			String rd_info =String.valueOf(testData[81]);
+//    		String rd_type =String.valueOf(testData[80]);
+//			String rd_info =String.valueOf(testData[81]);
 			
 			//click on Risk tab
 			getDriver().findElement(By.linkText(LoadProperty.getVar("riskTab", "element"))).click();
@@ -813,9 +813,9 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
-       		String namefirst =String.valueOf(testData[7]);
-    		String namelast =String.valueOf(testData[8]);
-    		String email =String.valueOf(testData[20]);
+//       	String namefirst =String.valueOf(testData[7]);
+//    		String namelast =String.valueOf(testData[8]);
+//    		String email =String.valueOf(testData[20]);
     		String bd_type =String.valueOf(testData[83]);
     		String bd_holdername =String.valueOf(testData[84]);
 			String bd_bankname =String.valueOf(testData[85]);
@@ -1240,11 +1240,17 @@ public class AddClientContractDetails extends TestBase{
       	 
       	 Iterator<String> itrKey=mapInsFieldTestData.keySet().iterator();
       	 while(itrKey.hasNext()){
-      		coreFunc.waitForWhile(1);
+      		 coreFunc.waitForWhile(2);
       		 String key=itrKey.next();
       		 InsuranceField objInsuranceField=mapInsFieldTestData.get(key);
       		 if(lsInteractedFields.contains(key))
       		   continue;
+      		 
+      		 //Just add field in log if test data is not specified for the field.
+      		 if(objInsuranceField.testDataValue.isEmpty()){
+      			TestResult.addTestResult("Enter "+objInsuranceField.fieldTitle+" field","Passed","Execution skipped for this field since test data is not specified in TestData sheet for this field.");
+      			continue;
+      		 }
       		 String[] testResult=null;
       		 if(!objInsuranceField.dependOn.isEmpty()){
       		     String dependsOnItemKey=getDependsOnItemKey(mapInsFieldTestData,objInsuranceField.dependOn);
@@ -1257,8 +1263,6 @@ public class AddClientContractDetails extends TestBase{
       			 lsInteractedFields.add(dependsOnItemKey);
       			 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
       		 }
-//      		 objInsuranceField.fieldName;
-//      		 objInsuranceField.fieldType;
       		 testResult=coreFunc.interactWithElementBasedOnType(objInsuranceField);
       		 lsInteractedFields.add(key);
       		 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
