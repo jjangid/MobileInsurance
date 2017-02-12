@@ -448,9 +448,9 @@ public class CoreRepository extends TestBase {
 			 try{
 				 				 
 				 Reporter.log("Test Case ID : "+testCaseID	+ "  Status : "+Status+ "  Comment : "+	Comment);				 
-				 reportPath = project_path	+ "\\src\\test\\resources\\HTMLReport";
+				 reportPath = project_path	+ "\\src\\test\\resources\\Report";
 				 System.out.println("reportPath: '" + reportPath + "'");
-				 fWriter = new FileWriter(reportPath+"//MobileInsurance_Results.html",true);
+				 fWriter = new FileWriter(reportPath+"//MI_Results.html",true);
 		            //creating a buffered writer for the file object
 	             writer = new BufferedWriter(fWriter);
 	             DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

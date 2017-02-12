@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TestResult {
@@ -68,16 +69,33 @@ public class TestResult {
         testCaseResult.append("</Table>");
 	}
 	
-	public static void generateTestResult(){
+	private static void renameFile(String filePath){
+    	
+    	File eTestResult=new File(filePath+"\\MI_Detailed_Results.html");
+    	new File("loc/xyz1.mp3").renameTo(new File("loc/xyz.mp3"));
+    	if(eTestResult.exists()){   
+    	   String fileName=String.format("MI_Detailed_Results_"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+    	   File nFile=new File(filePath+"\\"+fileName);
+    	   System.out.println("Renamed Detailed ReportFileName "+fileName);
+    	   eTestResult.renameTo(nFile);    	  
+    	   nFile=null;
+    	}
+    	eTestResult=null;
+    }
+    
+    public static void generateTestResult(){
 		if(testCaseResult.length() == 0){
 			System.out.println("Info: No test result to write in file. Hence skipped generating Test result file.");
 			return;
 		}
-		
+		 String project_path = System.getProperty("user.dir");
+		 String fpath = project_path+"\\src\\test\\resources\\Report\\";
+		 renameFile(fpath);
 		 PrintWriter testResultStream=null;
-		 String fName=String.format("%s/TestResult_%s.htm", "Report",new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
-         try {
-			testResultStream=new PrintWriter(new File(fName));
+		 //String fName=String.format("MI_Detailed_Results.html", "Report",new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+		 //System.out.println("getReportFileName "+fName);
+		 try {
+			testResultStream=new PrintWriter(new File(fpath+"MI_Detailed_Results.html"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

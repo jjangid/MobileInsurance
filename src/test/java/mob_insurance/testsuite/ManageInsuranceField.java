@@ -84,7 +84,7 @@ public class ManageInsuranceField {
 				String tabName=getCellValue(cRow,mapHeaderInfo.get(columnTabName));
 //				String sequence=getCellValue(cRow,mapHeaderInfo.get(columnSequence));
 				
-				//Skip processing current row if Insurance Type or Element Name / Type / Lable is blank				
+				//Skip processing current row if Insurance Type or Element Name / Type / Label is blank				
 				if(insuranceType.isEmpty() || elementName.isEmpty() || elementType.isEmpty() || fieldLabel.isEmpty() ){
 					System.out.println("Insurance Type or Element Name or Type Or Field Label is blank for "+r+" row. Hence skipped this row.");
 					continue;
@@ -190,16 +190,16 @@ public class ManageInsuranceField {
 		
 		try{
 			
-			System.out.println("Info: Writing insurnace fields in Report\\InsuranceFieldInfo.xls");
+			System.out.println("Info: Writing insurnace fields in src\\test\\resources\\Outputfiles\\InsuranceFieldInfo.xls");
 //			Write Insurance fields in Excel sheet
-			FileOutputStream fileOutputStream=new FileOutputStream(new File("Report\\InsuranceFieldInfo.xls"));
+			FileOutputStream fileOutputStream=new FileOutputStream(new File("src\\test\\resources\\Outputfiles\\InsuranceFieldInfo.xls"));
 			wBook.write(fileOutputStream);
 			fileOutputStream.close();
 			wBook.close();
 			
 //			Write property file
-			System.out.println("Info: Writing insurnace fields locator in Report\\InsuranceFieldLocator.properties");
-			fileOutputStream=new FileOutputStream(new File("Report\\InsuranceFieldLocator.properties"));
+			System.out.println("Info: Writing insurnace fields locator in src\\test\\resources\\Outputfiles\\InsuranceFieldLocator.properties");
+			fileOutputStream=new FileOutputStream(new File("src\\test\\resources\\Outputfiles\\InsuranceFieldLocator.properties"));
 			prInsuranceFieldLocator.store(fileOutputStream, "Place all these properties between Start/End: Insurance Field tag inside locator_en/_dh.properties files.");
 			fileOutputStream.close();
 			
@@ -250,7 +250,7 @@ public class ManageInsuranceField {
 	  		              return;
   	  }
 	  
-	  prInsuranceFieldLocator.put(key.toUpperCase()+"_EN", prValue);
+	  prInsuranceFieldLocator.put(key.toUpperCase(), prValue);
 	  prInsuranceFieldLocator.put(key.toUpperCase()+"_DE", prValue);
 		
 	} 

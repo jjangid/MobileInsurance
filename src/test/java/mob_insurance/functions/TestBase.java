@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import mob_insurance.functions.CoreRepository;
@@ -72,11 +74,11 @@ public class TestBase extends Bean {
 			if(generate_html_report.equalsIgnoreCase("true")) 			
 			{			
 				System.out.println("Html Report created");
-				reportPath = project_path	+ "\\src\\test\\resources\\HTMLReport";	
+				reportPath = project_path	+ "\\src\\test\\resources\\Report";	
 				//*******************Start: Rename Existing Test Result file *********
 				  renameFile(reportPath);			
 				//*******************End: Rename Existing Test Result file *********
-	        	fWriter = new FileWriter(reportPath+"//MobileInsurance_Results.html");
+	        	fWriter = new FileWriter(reportPath+"//MI_Results.html");
 	            //creating a buffered writer for the file object
 	            writer = new BufferedWriter(fWriter);
 	            writer.write("<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>" + "<html>" +
@@ -296,19 +298,14 @@ public class TestBase extends Bean {
 		return retValue;
 	}
 
-	private String getReportFileName(){
-		Calendar cDate=Calendar.getInstance();
-		String fileName="MobileInsurance_Results_"+cDate.get(Calendar.YEAR)+""+(cDate.get(Calendar.MONTH)+1)+""+cDate.get(Calendar.DAY_OF_MONTH)+"_"+cDate.get(Calendar.HOUR_OF_DAY)+""+cDate.get(Calendar.MINUTE)+""+cDate.get(Calendar.SECOND);
-		return fileName+".html";
-	}
-
     private void renameFile(String filePath){
     	
-    	File eTestResult=new File(filePath+"\\MobileInsurance_Results.html");
+    	File eTestResult=new File(filePath+"\\MI_Results.html");
     	new File("loc/xyz1.mp3").renameTo(new File("loc/xyz.mp3"));
-    	if(eTestResult.exists()){    	   
-    	   File nFile=new File(filePath+"\\"+getReportFileName());
-    	   System.out.println("getReportFileName "+getReportFileName());
+    	if(eTestResult.exists()){ 
+    	   String fileName=String.format("MI_Results_"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+    	   File nFile=new File(filePath+"\\"+fileName);
+    	   System.out.println("Renamed ReportFileName "+fileName);
     	   eTestResult.renameTo(nFile);    	  
     	   nFile=null;
     	}
