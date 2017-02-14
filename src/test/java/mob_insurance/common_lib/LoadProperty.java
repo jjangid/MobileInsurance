@@ -11,6 +11,7 @@ import java.util.Properties;
 public class LoadProperty {
 
 	static String var = null;
+	private static Properties prpMappingModule=null;
 
 	public static String getVar(String key,String file) {
 		Properties props = new Properties();
@@ -32,6 +33,9 @@ public class LoadProperty {
 			else if(file=="config")
 			{
 				props.load(new FileInputStream(path + "config.properties"));
+			}else if(file.equalsIgnoreCase("MappingModule")){
+				loadMappingModule(path+"MappingModule.properties");
+				return props.getProperty(key);
 			}
 			if (key != null) {
 				var = props.getProperty(key);
@@ -45,6 +49,19 @@ public class LoadProperty {
 			e.printStackTrace();
 		}
 		return var;
+	}
+	
+	private static void loadMappingModule(String path){
+		if(prpMappingModule==null){
+			prpMappingModule = new Properties();
+			try {
+				prpMappingModule.load(new FileInputStream(path));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }

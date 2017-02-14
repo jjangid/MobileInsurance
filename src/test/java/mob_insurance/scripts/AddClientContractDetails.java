@@ -1202,14 +1202,20 @@ public class AddClientContractDetails extends TestBase{
 					   TestResult.addTestResult(testStep,"Failed","Unable to select on designated insurance type.");	
 					   return;
 					}
-					fillInsuranceFields(testDataReference,insuranceType);	
-					coreFunc.waitForWhile(5);
-					
-					testStep="Click Contract Data Tab.";
-					locator=ManageLocator.getLocator("Tab.Client.Contract.Create.ContractData");
-					WebElement eleClientTab=coreFunc.findElement(locator[0],locator[1]);
-					eleClientTab.click(); 
-					TestResult.addTestResult(testStep,"Passed");
+					String moduleName=LoadProperty.getVar(insuranceType, "MappingModule");
+					if(moduleName != null && !moduleName.trim().isEmpty()){
+						fillInsuranceFields(testDataReference,moduleName);	
+						coreFunc.waitForWhile(5);
+						
+						testStep="Click Contract Data Tab.";
+						locator=ManageLocator.getLocator("Tab.Client.Contract.Create.ContractData");
+						WebElement eleClientTab=coreFunc.findElement(locator[0],locator[1]);
+						eleClientTab.click(); 
+						TestResult.addTestResult(testStep,"Passed");
+					}else{
+						testStep="Fill insurance field after selecting module";
+						TestResult.addTestResult(testStep,"Failed","Unable to find mapping module in property file hence aborted the process.");
+					}
 			 }				
    		}
     	catch(NoSuchElementException eNFound)
