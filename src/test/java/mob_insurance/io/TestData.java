@@ -3,6 +3,8 @@ package mob_insurance.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -69,13 +71,14 @@ public class TestData {
 		
 	}
 
-    public Map<String,InsuranceField> readInsuranceTypeTestData(String testDataReference, String insType){
+    public Map<Integer,List<InsuranceField>> readInsuranceTypeTestData(String testDataReference, String insType){
         TestDataReference objTDRef=getTestDataReference(testDataReference);
     	
     	File objXLSObjectDD=null;
 		FileInputStream fObjDB =null;
 		Workbook wBook=null;
-		Map<String,InsuranceField> mapTestDataRow=new TreeMap<String,InsuranceField>(String.CASE_INSENSITIVE_ORDER);
+		Map<Integer,List<InsuranceField>> mapTestDataRow=new TreeMap<Integer,List<InsuranceField>>();
+		List<InsuranceField> lsInsuranceField=null;
 		try{
 			objXLSObjectDD=new File("src//test//resources//TestCases//"+objTDRef.fileName);
 			fObjDB = new FileInputStream(objXLSObjectDD);
@@ -99,11 +102,17 @@ public class TestData {
 					continue;
 				}
 				
+				Cell cellSequence=cRow.getCell(0);
+				Integer sequence=-1;
+				if(cellSequence!= null && cellSequence.getCellType() != Cell.CELL_TYPE_BLANK){
+					sequence=Double.valueOf(cellSequence.getNumericCellValue()).intValue();
+				}
+				
 				InsuranceField objInsuranceField=new InsuranceField();
 				
-				objInsuranceField.insuranceType=cRow.getCell(0).getStringCellValue();
-				objInsuranceField.fieldName=cRow.getCell(2).getStringCellValue();
-				String insuranceField=cRow.getCell(2).getStringCellValue();	
+				objInsuranceField.insuranceType=cRow.getCell(1).getStringCellValue();
+				objInsuranceField.fieldName=cRow.getCell(3).getStringCellValue();
+//				String insuranceField=cRow.getCell(3).getStringCellValue();	
 				String fieldValue="";
 				Cell cCell=cRow.getCell(cellRef.getCol());
 				if(cCell == null)
@@ -119,8 +128,8 @@ public class TestData {
 					fieldValue=String.valueOf(cCell.getBooleanCellValue());
 				}
 				objInsuranceField.testDataValue=fieldValue.trim();
-				objInsuranceField.fieldTitle=cRow.getCell(3).getStringCellValue();
-				objInsuranceField.fieldType=cRow.getCell(4).getStringCellValue();
+				objInsuranceField.fieldTitle=cRow.getCell(4).getStringCellValue();
+				objInsuranceField.fieldType=cRow.getCell(5).getStringCellValue();
 				
 				//Set dependOn field
 				if(objInsuranceField.fieldTitle.contains("->")){
@@ -129,7 +138,13 @@ public class TestData {
 					
 				}
 				
-				mapTestDataRow.put(insuranceField, objInsuranceField);
+				lsInsuranceField=mapTestDataRow.get(sequence);
+				if(mapTestDataRow.get(sequence) == null){
+					lsInsuranceField=new ArrayList<InsuranceField>();
+				}
+				
+				lsInsuranceField.add(objInsuranceField);
+				mapTestDataRow.put(sequence, lsInsuranceField);
 			}
 		}catch(Exception e){
 			System.out.println("Error: Exception occured while reading TestData file. Values should be specified in all test data column of excel. Below is Stacktrace: "+e);

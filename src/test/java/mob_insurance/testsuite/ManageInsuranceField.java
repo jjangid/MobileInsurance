@@ -24,7 +24,7 @@ public class ManageInsuranceField {
 
 
 	String fileName="";
-	String columnInsuranceType,columnFieldLabel,columnElementType,columnOptions,columnCondition,columnElementName,columnTabName;//,columnSequence;
+	String columnInsuranceType,columnFieldLabel,columnElementType,columnOptions,columnCondition,columnElementName,columnTabName,columnSequence;
 	Properties prInsuranceFieldLocator=null;
 	
 	public ManageInsuranceField(){
@@ -36,7 +36,7 @@ public class ManageInsuranceField {
 			columnCondition=ManageConfig.getValue("InsuranceField.HeaderName.condition");
 			columnElementName=ManageConfig.getValue("InsuranceField.HeaderName.elementName");
 			columnTabName=ManageConfig.getValue("InsuranceField.HeaderName.tab");
-//			columnSequence=ManageConfig.getValue("InsuranceField.HeaderName.FieldSequenceNumber");
+			columnSequence=ManageConfig.getValue("InsuranceField.HeaderName.FieldSequenceNumber");
 			prInsuranceFieldLocator=new Properties();
 			
 		}catch(Exception e){
@@ -82,16 +82,14 @@ public class ManageInsuranceField {
 				String condition=getCellValue(cRow,mapHeaderInfo.get(columnCondition));
 				String elementName=getCellValue(cRow,mapHeaderInfo.get(columnElementName));
 				String tabName=getCellValue(cRow,mapHeaderInfo.get(columnTabName));
-//				String sequence=getCellValue(cRow,mapHeaderInfo.get(columnSequence));
+				String sequence=getCellValue(cRow,mapHeaderInfo.get(columnSequence));
 				
 				//Skip processing current row if Insurance Type or Element Name / Type / Label is blank				
 				if(insuranceType.isEmpty() || elementName.isEmpty() || elementType.isEmpty() || fieldLabel.isEmpty() ){
 					System.out.println("Insurance Type or Element Name or Type Or Field Label is blank for "+r+" row. Hence skipped this row.");
 					continue;
 				}
-//				if(r==1204){
-//					System.out.println("");
-//				}
+
 				FieldInfo objFieldInfo=new FieldInfo();
 				objFieldInfo.fieldName=elementName;
 				objFieldInfo.fieldType=elementType;
@@ -101,7 +99,7 @@ public class ManageInsuranceField {
 				if(tabName.toUpperCase().endsWith("_CLIENT") ||tabName.toUpperCase().endsWith("_ORDER") || tabName.toUpperCase().endsWith("ORDER_REQUEST") || tabName.toUpperCase().endsWith("ORDER_PROT") || tabName.toUpperCase().endsWith("_PRODUCT")){
 					objFieldInfo.tab=tabName;	
 				}
-//				objFieldInfo.sequenceNumber=Double.valueOf(sequence).intValue();
+				objFieldInfo.sequenceNumber=Double.valueOf(sequence).intValue();
 				
 				if(mapInsuranceFieldInfo.get(insuranceType) == null){
 				   mapFieldInfo=new TreeMap<String,FieldInfo>(String.CASE_INSENSITIVE_ORDER);
@@ -110,9 +108,6 @@ public class ManageInsuranceField {
 				}
 				mapFieldInfo.put(tabName+"."+elementName,objFieldInfo);
 				mapInsuranceFieldInfo.put(insuranceType, mapFieldInfo);
-//				if(elementName.equalsIgnoreCase("deckungssumme")){
-//					System.out.println(r+". Ins Type: "+insuranceType+" || Field Type:"+elementType+" || Tab: "+objFieldInfo.tab);
-//				}
 				
 			}
 			
@@ -157,12 +152,13 @@ public class ManageInsuranceField {
 		wBook.setSheetName(wBook.getSheetIndex(sheet),"Insurance Fields");
 		//Create header row
 		Row hRow=sheet.createRow(0);
-		hRow.createCell(0).setCellValue("Insurance Type");
-		hRow.createCell(1).setCellValue("Tab");
-		hRow.createCell(2).setCellValue("Element Name");
-		hRow.createCell(3).setCellValue("Field Title");
-		hRow.createCell(4).setCellValue("Field Type");
-		hRow.createCell(5).setCellValue("TestData-1");
+		hRow.createCell(0).setCellValue("Sequence");
+		hRow.createCell(1).setCellValue("Insurance Type");
+		hRow.createCell(2).setCellValue("Tab");
+		hRow.createCell(3).setCellValue("Element Name");
+		hRow.createCell(4).setCellValue("Field Title");
+		hRow.createCell(5).setCellValue("Field Type");
+		hRow.createCell(6).setCellValue("TestData-1");
 		
 		int rowIndex=1;
 		while(itrInsurnaceType.hasNext()){
@@ -175,12 +171,12 @@ public class ManageInsuranceField {
     			FieldInfo objFieldInfo=mapFieldInfo.get(keyTabElementName);
 				String fieldName=getFieldName(mapFieldInfo,objFieldInfo);
 				//Needs to write: Logic to prepare row includes values for Insurance Type / Field Name / Element Type
-				row.createCell(0).setCellValue(keyInsuranceType);
-				row.createCell(1).setCellValue(objFieldInfo.tab);
-				row.createCell(2).setCellValue(objFieldInfo.fieldName);
-//				row.createCell(2).setCellValue(objFieldInfo.fieldTitle);
-				row.createCell(3).setCellValue(fieldName);
-				row.createCell(4).setCellValue(objFieldInfo.fieldType);
+				row.createCell(0).setCellValue(objFieldInfo.sequenceNumber);
+				row.createCell(1).setCellValue(keyInsuranceType);
+				row.createCell(2).setCellValue(objFieldInfo.tab);
+				row.createCell(3).setCellValue(objFieldInfo.fieldName);
+				row.createCell(4).setCellValue(fieldName);
+				row.createCell(5).setCellValue(objFieldInfo.fieldType);
 				
 				appendInsuranceFieldLocatorInProperty(keyInsuranceType+"."+objFieldInfo.fieldName,objFieldInfo.fieldType,objFieldInfo.tab,fieldName,objFieldInfo.fieldName);
 				rowIndex++;
@@ -306,7 +302,7 @@ public class ManageInsuranceField {
 		String comboBox_Value="";
 		String fieldCheck="";
 		String tab="";
-//		int sequenceNumber=-1;
+		int sequenceNumber=-1;
 	}	
 	
 	

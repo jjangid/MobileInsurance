@@ -1242,58 +1242,75 @@ public class AddClientContractDetails extends TestBase{
     private void fillInsuranceFields(String testDataReference, String insuranceType){
       	 TestData objTestData=new TestData();
       	 List<String> lsInteractedFields=new ArrayList<String>();
-      	 Map<String,InsuranceField> mapInsFieldTestData=objTestData.readInsuranceTypeTestData(testDataReference,insuranceType);
+      	 Map<Integer,List<InsuranceField>> mapInsFieldTestData=objTestData.readInsuranceTypeTestData(testDataReference,insuranceType);
       	 
-      	 Iterator<String> itrKey=mapInsFieldTestData.keySet().iterator();
+      	 Iterator<Integer> itrKey=mapInsFieldTestData.keySet().iterator();
       	 while(itrKey.hasNext()){
       		 coreFunc.waitForWhile(2);
-      		 String key=itrKey.next();
-      		 InsuranceField objInsuranceField=mapInsFieldTestData.get(key);
-      		 if(lsInteractedFields.contains(key))
-      		   continue;
-      		 
-      		 //Just add field in log if test data is not specified for the field.
-      		 if(objInsuranceField.testDataValue.isEmpty()){
-      			TestResult.addTestResult("Enter "+objInsuranceField.fieldTitle+" field","Passed","Execution skipped for this field since test data is not specified in TestData sheet for this field.");
-      			continue;
-      		 }
-      		 String[] testResult=null;
-      		 if(!objInsuranceField.dependOn.isEmpty()){
-      		     String dependsOnItemKey=getDependsOnItemKey(mapInsFieldTestData,objInsuranceField.dependOn);
-      		     if(dependsOnItemKey.isEmpty()){
-      		       TestResult.addTestResult("Input Data into"+objInsuranceField.fieldTitle,"Failed","This field is depended on "+objInsuranceField.dependOn+" field and test data should be present for depends on field.");
-      		       lsInteractedFields.add(key);
-      		       continue;
-      		     }
-      			 testResult=interactDependsOnFirst(mapInsFieldTestData.get(dependsOnItemKey));
-      			 lsInteractedFields.add(dependsOnItemKey);
-      			 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
-      		 }
-      		 testResult=coreFunc.interactWithElementBasedOnType(objInsuranceField);
-      		 lsInteractedFields.add(key);
-      		 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
-      	 }
-       }
+      		 Integer key=itrKey.next();
+      		 List<InsuranceField> lsInsuranceField=mapInsFieldTestData.get(key);
+      		 int index=0;
+       		 while(lsInsuranceField.size()>index){
+      			InsuranceField objInsuranceField=lsInsuranceField.get(index);
+      			if(lsInteractedFields.contains(objInsuranceField.fieldName)){
+      			   index++;	
+           		   continue;
+      			}
+      		   //Just add field in log if test data is not specified for the field.
+         		if(objInsuranceField.testDataValue.isEmpty()){
+         			TestResult.addTestResult("Enter "+objInsuranceField.fieldTitle+" field","Passed","Execution skipped for this field since test data is not specified in TestData sheet for this field.");
+         			index++;	
+         			continue;
+         		}
+         		
+         		 String[] testResult=null;
+          		 if(!objInsuranceField.dependOn.isEmpty()){
+          			 InsuranceField dependsOnItem=getDependsOnItem(mapInsFieldTestData,objInsuranceField.dependOn);
+          		     if(dependsOnItem==null){
+          		       TestResult.addTestResult("Input Data into"+objInsuranceField.fieldTitle,"Failed","This field is depended on "+objInsuranceField.dependOn+" field and test data should be present for depends on field.");
+          		       lsInteractedFields.add(objInsuranceField.fieldName);
+          		       index++;
+          		       continue;
+          		     }
+          		     
+          			 testResult=interactDependsOnFirst(dependsOnItem);
+          			 lsInteractedFields.add(dependsOnItem.fieldName);
+          			 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
+          		 }
+          		 testResult=coreFunc.interactWithElementBasedOnType(objInsuranceField);
+          		 lsInteractedFields.add(objInsuranceField.fieldName);
+          		 TestResult.addTestResult(testResult[0],testResult[1],testResult[2]);
+          		 index++;
+          	 }
+         }
+    }
        
        private String[] interactDependsOnFirst(InsuranceField objInsuranceField){
       	 String[] testResult=coreFunc.interactWithElementBasedOnType(objInsuranceField);    	 
       	 return testResult;
        } 
        
-       private String getDependsOnItemKey(Map<String,InsuranceField> mapInsFieldTestData,String title){
-      	 Iterator<String> itrKey=mapInsFieldTestData.keySet().iterator();
-      	 String dependsOnItemKey="";
-      	 while(itrKey.hasNext()){
-      		 String key=itrKey.next();
-      		 InsuranceField objInsuranceField=mapInsFieldTestData.get(key);
-      		 if(title.equalsIgnoreCase(objInsuranceField.fieldTitle)){
-      			 dependsOnItemKey=key;
-      			 break;
+       private InsuranceField getDependsOnItem(Map<Integer,List<InsuranceField>> mapInsFieldTestData,String title){
+      	 Iterator<Integer> itrKey=mapInsFieldTestData.keySet().iterator();
+      	 InsuranceField dependsOnField=null;
+      	 while(itrKey.hasNext() && dependsOnField==null){
+      		 Integer key=itrKey.next();
+      		 List<InsuranceField> lsInsuranceField=mapInsFieldTestData.get(key);
+      		 int index=0;
+      		 while(lsInsuranceField.size() > index && dependsOnField==null){
+      			InsuranceField objInsuranceField=lsInsuranceField.get(index);
+         		 if(title.equalsIgnoreCase(objInsuranceField.fieldTitle)){
+         			 dependsOnField=objInsuranceField;
+         			 break;
+         		 }	
+         		index++;
       		 }
+      		 
       	 }
       	 
-      	 return dependsOnItemKey;
+      	 return dependsOnField;
        }
-          
+       
+        
 }
 
