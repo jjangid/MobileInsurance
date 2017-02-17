@@ -52,6 +52,8 @@ import jxl.write.WriteException;
 import mob_insurance.common.teststep.InsuranceField;
 import mob_insurance.common_lib.LoadProperty;
 import mob_insurance.io.ManageLocator;
+import mob_insurance.processor.Browser;
+import mob_insurance.processor.TestResult;
 
 public class CoreRepository extends TestBase {
 
@@ -67,14 +69,16 @@ public class CoreRepository extends TestBase {
 		boolean isLogin = false;
 		try {
 			Thread.sleep(10000);
-			getDriver().findElement(By.cssSelector(LoadProperty.getVar("languageDD_CSS", "element"))).click();
-			getDriver().findElement(By.id(LoadProperty.getVar("languageDD_ID", "element"))).sendKeys(Keys.ARROW_DOWN);
-			
-			WebElement item = getDriver().findElement(By.xpath(LoadProperty.getVar("languageDD", "element")));
-		     if (item.isEnabled() && item.isDisplayed()){
-		          item.click();
-		      }  
-		    Thread.sleep(5000);
+			String languageCode=LoadProperty.getVar("loginLanguage", "data");
+//			selectLanguage(languageCode);
+//			getDriver().findElement(By.cssSelector(LoadProperty.getVar("languageDD_CSS", "element"))).click();
+//			getDriver().findElement(By.id(LoadProperty.getVar("languageDD_ID", "element"))).sendKeys(Keys.ARROW_DOWN);
+//			
+//			WebElement item = getDriver().findElement(By.xpath(LoadProperty.getVar("languageDD", "element")));
+//		     if (item.isEnabled() && item.isDisplayed()){
+//		          item.click();
+//		      }  
+		    Thread.sleep(20000);
 			//enter username
 			WebElement userName = getDriver().findElement(By.name(LoadProperty.getVar("username", "element")));
 			userName.clear();
@@ -101,6 +105,43 @@ public class CoreRepository extends TestBase {
 		return isLogin;
 
 	}
+	
+	private boolean selectLanguage(String languageCode) {		 
+		 try{
+			 
+//			 String[] locatorSelectedLng=ManageLocator.getLocator("Login.Language.dropdown.selected");
+			 String locatorSelectedLng=LoadProperty.getVar("Login.Language.dropdown.selected","element");
+			 WebElement eleSelectedLanguage=findElement("xpath",locatorSelectedLng);
+			 			 
+			 if(!eleSelectedLanguage.getText().trim().equalsIgnoreCase(languageCode)){			 
+				 String locatorLang=LoadProperty.getVar("Login.Language.dropdown","element");
+				 WebElement dropdownLanguage=findElement("xpath", locatorLang);
+				 int offSetHeight=dropdownLanguage.getSize().getHeight()/2;
+				 int offSetWidth=dropdownLanguage.getSize().getWidth()-10;
+				 
+				 Actions build = new Actions(getDriver());
+				 build.moveToElement(dropdownLanguage, offSetWidth, offSetHeight).click().build().perform();
+				 
+				 
+				 String locatorSelectLang=LoadProperty.getVar("Login.Language.dropdown.select","element");
+				 locatorSelectLang=locatorSelectLang.replaceAll("@language", languageCode);
+				 WebElement selectLanguage=findElement("xpath", locatorSelectLang);
+				 selectLanguage.click();
+				 System.out.println("Selected language..");
+//				 TestResult.addTestResult("Choose Language code as "+languageCode,"Passed");				 
+			 }else{
+				 System.out.println("Deafualted language is same as sepcified language");
+//				 TestResult.addTestResult("Choose Language code as "+languageCode,"Passed","- Defaulted language was same as specified lanaguage code in test data. Hence language code has not choosen again.");
+			 }
+		 }catch(Exception e){
+			 System.out.println("error in language selection");
+//			 TestResult.addTestResult("Choose Language code as "+languageCode,"Failed","- Error occured while choosing another language code.");
+		     return false;
+		 }
+		 
+		 return true;
+	 }
+	
 	
 	/* This method is used to Logout in system */
 	public boolean Logout() throws IOException {
@@ -551,6 +592,12 @@ public class CoreRepository extends TestBase {
 	public WebElement waitUntilElementToBeVisible(String locatorType,String locatorValue){
 		WebElement wElement=null;
 		wElement=(new WebDriverWait(getDriver(), 30)).until(ExpectedConditions.visibilityOfElementLocated(getByReference(locatorType, locatorValue)));
+		return wElement;		
+	}
+	
+	public WebElement waitUntilElementToBeVisible(String locatorType,String locatorValue,int waitTimeinSec){
+		WebElement wElement=null;
+		wElement=(new WebDriverWait(getDriver(), waitTimeinSec)).until(ExpectedConditions.visibilityOfElementLocated(getByReference(locatorType, locatorValue)));
 		return wElement;		
 	}
 	

@@ -153,26 +153,85 @@ public class TarifCalculator extends TestBase{
 			
 			Thread.sleep(5000);
 			
-			//click on composit tab
+			
+			
+			//Click Insurance Category tab
+			String insuranceCategory=String.valueOf(testData[4]);
+			String insCategoryLocator=LoadProperty.getVar("Menu.TarifCalculator.InsuranceCategory", "element");
+			insCategoryLocator=insCategoryLocator.replaceAll("@category", insuranceCategory);
+			getDriver().findElement(By.xpath(insCategoryLocator)).click();
+						
+			//click on Insurance Type tab
 			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-			getDriver().findElement(By.xpath(LoadProperty.getVar("composit", "element"))).click();
+			String insuranceType=String.valueOf(testData[5]);
+			String insTypeLocator=LoadProperty.getVar("Menu.TarifCalculator.InsuranceType", "element");
+			insTypeLocator=insTypeLocator.replaceAll("@type", insuranceType);
+			getDriver().findElement(By.xpath(insTypeLocator)).click();
 			Reporter.log("Clicked on tab :  "+LoadProperty.getVar("composit", "element"));
 			
 			Thread.sleep(5000);
 			
-			//click on horseholderliability tab
-			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-			getDriver().findElement(By.xpath(LoadProperty.getVar("horseholderliability", "element"))).click();
-			Reporter.log("Clicked on tab :  "+LoadProperty.getVar("horseholderliability", "element"));
-			
-			Thread.sleep(5000);
-			
-			clientWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LoadProperty.getVar("desiredselfparticipation", "element"))));
-			
 			//click on send button
 			coreFunc.ClickOnActionButton("Send");
-			
+			//Wait till Results tab gets appeared on page	
+			String resultTab=LoadProperty.getVar("Menu.TarifCalculator.ResultTab", "element");
+			coreFunc.waitUntilElementToBeVisible("xpath", resultTab,180);
 			Reporter.log("Clicked on '"+ coreFunc.GetDELanguageText("Send")+"' button");
+			
+//			Click 1st Order button
+			String orderButtonLocator=LoadProperty.getVar("TarifCalculator.ResultTab.Button.Order", "element");
+			WebElement eleOrderButton=coreFunc.findElement("xpath", orderButtonLocator);
+			eleOrderButton.click();
+			
+//			Wait until Product details pop-up comes-up
+			String productDetailsPopUpLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails", "element");
+			coreFunc.waitUntilElementToBeVisible("xpath", productDetailsPopUpLocator,180);
+			
+//			Accept the Terms
+			String termAcceptLocator=LoadProperty.getVar("TarifCalculator.Pop-up.ProductDetails.Acceptterm", "element");
+			WebElement eleTermAccept=coreFunc.findElement("xpath", termAcceptLocator);
+			eleTermAccept.click();
+			
+//			Click Offer button
+			String offerButtonLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails.OfferButton", "element");
+			WebElement eleOfferButton=coreFunc.findElement("xpath", offerButtonLocator);
+			eleOfferButton.click();
+			
+//			Wait for Confirmation message box
+			String confirmBoxLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails.ConfirmBox", "element");
+			coreFunc.waitUntilElementToBeVisible("xpath", confirmBoxLocator,180);
+
+//			Click Yes button
+			String YesButtonLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails.ConfirmBox.YesButton", "element");
+			WebElement eleYesButton=coreFunc.findElement("xpath", YesButtonLocator);
+			eleYesButton.click();
+
+//			Wait for success message 
+			String successMessageLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails.successmessage", "element");
+			coreFunc.waitUntilElementToBeVisible("xpath", successMessageLocator,180);
+			
+//			Close the Product Details
+			String closeButtonLocator=LoadProperty.getVar("TarifCalculator.Popup.ProductDetails.closebutton", "element");
+			WebElement eleCloseButton=coreFunc.findElement("xpath", closeButtonLocator);
+			eleCloseButton.click();
+			
+//			Click Clients tab
+			String clientTabLocator=LoadProperty.getVar("Menu.Client", "element");
+			WebElement eleClientTab=coreFunc.findElement("xpath", clientTabLocator);
+			eleClientTab.click();
+			
+//			Search client again
+			Thread.sleep(10000);
+			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).clear();
+			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).sendKeys(email);
+			
+			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
+
+//			Get Contract count
+			String contractCountLocator=LoadProperty.getVar("Client.Contract.count", "element");
+			WebElement eleContractCount=coreFunc.findElement("xpath", contractCountLocator);
+			String count=eleContractCount.getText();
+			System.out.println("Contract count: "+count);
 			
 			System.out.println("Debug log : Exiting from TarifCalcTest");				
 	    }
