@@ -33,9 +33,12 @@ public class LoadProperty {
 			else if(file=="config")
 			{
 				props.load(new FileInputStream(path + "config.properties"));
-			}else if(file.equalsIgnoreCase("MappingModule")){
-				loadMappingModule(path+"MappingModule.properties");
-				return props.getProperty(key);
+			}
+			else if(file.equalsIgnoreCase("MappingModule"))
+			{
+				//loadMappingModule(path+"MappingModule.properties");
+				props.load(new FileInputStream(path + "MappingModule.properties"));
+				//return props.getProperty(key);
 			}
 			if (key != null) {
 				var = props.getProperty(key);

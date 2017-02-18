@@ -186,9 +186,9 @@ public class ManageInsuranceField {
 		
 		try{
 			
-			System.out.println("Info: Writing insurnace fields in src\\test\\resources\\Outputfiles\\InsuranceFieldInfo.xls");
+			System.out.println("Info: Writing insurnace fields in src\\test\\resources\\Outputfiles\\ContractCategoryFieldInfo.xls");
 //			Write Insurance fields in Excel sheet
-			FileOutputStream fileOutputStream=new FileOutputStream(new File("src\\test\\resources\\Outputfiles\\InsuranceFieldInfo.xls"));
+			FileOutputStream fileOutputStream=new FileOutputStream(new File("src\\test\\resources\\Outputfiles\\ContractCategoryFieldInfo.xls"));
 			wBook.write(fileOutputStream);
 			fileOutputStream.close();
 			wBook.close();

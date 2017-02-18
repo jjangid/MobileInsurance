@@ -1,4 +1,0 @@
-@Path: com.nassv_aut.scripts.pname.testcase
-
-@Info: This folder is use to keep your automated scripts
-

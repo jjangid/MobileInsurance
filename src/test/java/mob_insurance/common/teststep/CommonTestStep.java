@@ -14,8 +14,8 @@ public class CommonTestStep {
 			 
 	         	// Login Page Locators
 				// Index 0: Locator Type and Index 1: Locator value
-				String[] locatorUserName=ManageLocator.getLocator("Username");
-				String[] locatorPWD=ManageLocator.getLocator("Password");
+				String[] locatorUserName=ManageLocator.getLocator("Uname");
+				String[] locatorPWD=ManageLocator.getLocator("Pword");
 				String[] locatorLoginButton=ManageLocator.getLocator("LoginButton");
 
 				boolean result=selectLanguage(webBrowser,languageCode);

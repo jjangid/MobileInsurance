@@ -646,7 +646,8 @@ public class CoreRepository extends TestBase {
 	    }
 	
 	private By getByReference(String locatorType,String locatorValue){
-	    	switch(locatorType.toLowerCase()){
+		System.out.println("Debug log : locatorType --> "+ locatorType +"  locatorValue  --> "+locatorValue);
+			switch(locatorType.toLowerCase()){
 			  case "xpath":
 				             return By.xpath(locatorValue);
 				         

@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import mob_insurance.common_lib.LoadProperty;
+
 
 public class ManageLocator {
 	static Properties configProperty = null; 
@@ -13,15 +15,7 @@ public class ManageLocator {
 		boolean result=true;
 		try{
 				FileInputStream configFileObj=null;
-				
-				if(language.equalsIgnoreCase("en"))
-				  configFileObj=new FileInputStream(new File("src//test//resources//config//locator_en.properties"));
-				else if(language.equalsIgnoreCase("de"))
-				  configFileObj=new FileInputStream(new File("src//test//resources//config//locator_de.properties"));
-				else{
-					System.out.println("Automation script has not configured for "+language+" language. Please co-ordinate with your test automation developer/team.");
-					return false;
-				}
+				configFileObj=new FileInputStream(new File("src//test//resources//config//element.properties"));
 				configProperty=new Properties();
 				configProperty.load(configFileObj);
 		}catch(IOException ioExceptionObj){		  	   
@@ -32,6 +26,10 @@ public class ManageLocator {
 	}
 	
 	public static String[] getLocator(String key){
+	 
+	 String lang =LoadProperty.getVar("loginLanguage", "data");
+	 key = lang.equalsIgnoreCase("DE") ? key+"_DE" :key;
+	 System.out.println("After key  "+key);	
 	 String keyValue=configProperty.getProperty(key);
 	 String[] arLocator =null;
 	 if(keyValue.lastIndexOf(")::") == -1){

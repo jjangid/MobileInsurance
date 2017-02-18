@@ -7,9 +7,13 @@
 <test name="MI_Test_Cycle_1">
 	<parameter name="browser" value="chrome"/>
 	<classes>
-	<!-- <class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.AgentSettingUploadFile"/>-->
+	<class name="mob_insurance.scripts.AgentSettingUploadFile"/><!-- 
 	<class name="mob_insurance.scripts.AddClientContractDetails"/>
+	<class name="mob_insurance.scripts.AgentSettingUploadFile"/>
+	<class name="mob_insurance.scripts.DeleteClientAndContract"/>
+	<class name="mob_insurance.scripts.EditClientAndContract"/>
+	<class name="mob_insurance.scripts.InsuranceOffer"/>
+	<class name="mob_insurance.scripts.AddAgent"/>-->
 	</classes> 
 </test><!--
 <test name="MI_Test_Cycle_2">

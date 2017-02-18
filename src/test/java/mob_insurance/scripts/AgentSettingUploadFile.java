@@ -73,10 +73,7 @@ public class AgentSettingUploadFile extends TestBase{
 	    }
 	    
 	    String languageCode = LoadProperty.getVar("loginLanguage", "data");
-		//System.out.println("Info: closing browser timeout."+languageCode);
-	   
-	   // languageCode=mapTestData.get("Language Code")!=null? mapTestData.get("Language Code").toUpperCase():"EN";
-	    	    
+	 	    
 	    if(!languageCode.equalsIgnoreCase("EN") && !languageCode.equalsIgnoreCase("DE")){
 	    	languageCode="EN";	
 	    }
@@ -119,21 +116,21 @@ public class AgentSettingUploadFile extends TestBase{
 		 
 		    try{
 		 
-	         	String userName=mapTestData.get("Username");
-				String password=mapTestData.get("Password");
-				String URL=mapTestData.get("URL");
+	         	String userName=LoadProperty.getVar("loginName", "data");//mapTestData.get("Username");
+				String password=LoadProperty.getVar("loginPassword", "data");//mapTestData.get("Password");
+				String URL=LoadProperty.getVar("baseUrl", "data");//mapTestData.get("URL");
 				
 				webBrowser.getURL(URL);
 				
 				// Login Page Locators
 				// Index 0: Locator Type and Index 1: Locator value
 		
-				String[] locatorUserName=ManageLocator.getLocator("Username");
-				String[] locatorPWD=ManageLocator.getLocator("Password");
+				String[] locatorUserName=ManageLocator.getLocator("Uname");
+				String[] locatorPWD=ManageLocator.getLocator("Pword");
 				String[] locatorLoginButton=ManageLocator.getLocator("LoginButton");
 				
 				
-				boolean result=selectLanguage();
+				boolean result=true;//selectLanguage();
 				if(!result){
 					throw new Exception("Error ocurred while choosing language code.");
 				}

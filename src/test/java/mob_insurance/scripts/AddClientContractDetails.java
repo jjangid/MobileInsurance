@@ -83,7 +83,7 @@ public class AddClientContractDetails extends TestBase{
 			waitForLoad();
 			//Prepare test data
 			Object[][] testData=null;
-			testData=coreFunc.getTestData("CreateClientContract.xls");
+			testData=coreFunc.getTestData("AddClientContract.xls");
 			if (testData == null) {
 				System.out.println("File Name is Incorrect");
 				Reporter.log("File Name is Incorrect");
@@ -1202,7 +1202,9 @@ public class AddClientContractDetails extends TestBase{
 					   TestResult.addTestResult(testStep,"Failed","Unable to select on designated insurance type.");	
 					   return;
 					}
+					System.out.println("Debug log : moduleName "+insuranceType);
 					String moduleName=LoadProperty.getVar(insuranceType, "MappingModule");
+					System.out.println("Debug log : moduleName "+moduleName);
 					if(moduleName != null && !moduleName.trim().isEmpty()){
 						fillInsuranceFields(testDataReference,moduleName);	
 						coreFunc.waitForWhile(5);
@@ -1285,12 +1287,12 @@ public class AddClientContractDetails extends TestBase{
          }
     }
        
-       private String[] interactDependsOnFirst(InsuranceField objInsuranceField){
+    private String[] interactDependsOnFirst(InsuranceField objInsuranceField){
       	 String[] testResult=coreFunc.interactWithElementBasedOnType(objInsuranceField);    	 
       	 return testResult;
-       } 
+    } 
        
-       private InsuranceField getDependsOnItem(Map<Integer,List<InsuranceField>> mapInsFieldTestData,String title){
+    private InsuranceField getDependsOnItem(Map<Integer,List<InsuranceField>> mapInsFieldTestData,String title){
       	 Iterator<Integer> itrKey=mapInsFieldTestData.keySet().iterator();
       	 InsuranceField dependsOnField=null;
       	 while(itrKey.hasNext() && dependsOnField==null){
@@ -1309,7 +1311,7 @@ public class AddClientContractDetails extends TestBase{
       	 }
       	 
       	 return dependsOnField;
-       }
+    }
        
         
 }
