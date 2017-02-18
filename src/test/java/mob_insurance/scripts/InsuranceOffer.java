@@ -38,7 +38,7 @@ public class InsuranceOffer extends TestBase{
 	String locatorType=null;
 	String locator=null;
 	@Test
-	public void TarifCalculatorTest() throws Exception{
+	public void InsuranceOfferTest() throws Exception{
 	try
 		{
 			Reporter.log("Test execution has started...");
@@ -56,11 +56,11 @@ public class InsuranceOffer extends TestBase{
 			coreFunc.Login();
 			//Prepare test data
 			Object[][] testData=null;
-			testData=coreFunc.getTestData("TarifCalculator.xls");
+			testData=coreFunc.getTestData("InsuranceOffer.xls");
 			if (testData == null) {
 				System.out.println("File Name is Incorrect");
 				Reporter.log("File Name is Incorrect");
-				coreFunc.logData("TarifCalculator", "", "Failed","File Name is Incorrect", assertEnabled);
+				coreFunc.logData("InsuranceOffer", "", "Failed","File Name is Incorrect", assertEnabled);
 				Assert.assertEquals(testData, "null");
 			}
 			System.out.println("TestCaseCount : "+testData.length);
@@ -83,7 +83,7 @@ public class InsuranceOffer extends TestBase{
 					
 					if(TarifCalc)
 					{
-						coreFunc.logData("TarifCalculatorTest",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
+						coreFunc.logData("InsuranceOfferTest",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
 					}
 				}
@@ -100,7 +100,7 @@ public class InsuranceOffer extends TestBase{
 		}
 		catch(Exception e){
 			Reporter.log("Error: Test Case failed due to error occured");
-			coreFunc.logData("TarifCalculatorTest","","Failed","Error: Refer output logs for more information.",assertEnabled);
+			coreFunc.logData("InsuranceOfferTest","","Failed","Error: Refer output logs for more information.",assertEnabled);
 			e.printStackTrace();
 		}		
 		
