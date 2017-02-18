@@ -78,7 +78,7 @@ public class CoreRepository extends TestBase {
 //		     if (item.isEnabled() && item.isDisplayed()){
 //		          item.click();
 //		      }  
-		    Thread.sleep(20000);
+		    //Thread.sleep(20000);
 			//enter username
 			WebElement userName = getDriver().findElement(By.name(LoadProperty.getVar("username", "element")));
 			userName.clear();
