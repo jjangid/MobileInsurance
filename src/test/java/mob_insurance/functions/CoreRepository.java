@@ -701,7 +701,7 @@ public class CoreRepository extends TestBase {
 	}
 
 	public String[] interactWithElementBasedOnType(InsuranceField objInsuranceField){
-	String[] testResult=new String[3];
+	String[] testResult=new String[]{"","",""};
 	testResult[0]="Enter "+objInsuranceField.fieldTitle+" as "+objInsuranceField.testDataValue+".";
 	
 	try{
