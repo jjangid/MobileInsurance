@@ -3,8 +3,6 @@ package mob_insurance.listeners;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
-import mob_insurance.processor.TestResult;
-
 public class TestSuitListener implements ISuiteListener{
 
 	@Override

@@ -1,4 +1,4 @@
-package mob_insurance.common.teststep;
+package mob_insurance.io;
 
 public class InsuranceField {
 

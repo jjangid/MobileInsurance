@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import mob_insurance.common_lib.LoadProperty;
+import mob_insurance.io.LoadProperty;
 
 public class Library {
 

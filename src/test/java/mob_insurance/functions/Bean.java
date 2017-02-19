@@ -6,7 +6,7 @@ package mob_insurance.functions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import mob_insurance.common_lib.LoadProperty;
+import mob_insurance.io.LoadProperty;
 
 /**
  * @author IT Technocrats

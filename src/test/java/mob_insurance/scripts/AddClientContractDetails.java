@@ -1,67 +1,36 @@
 /*CreateClientAndContract*/
 package mob_insurance.scripts;
-
-import java.io.File;
-import java.util.Random;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import java.util.Iterator;
-import java.util.Map;
-
 import mob_insurance.functions.TestBase;
-import mob_insurance.io.ManageConfig;
+import mob_insurance.io.InsuranceField;
+import mob_insurance.io.LoadProperty;
 import mob_insurance.io.ManageLocator;
-import mob_insurance.io.TestData;
-import mob_insurance.processor.Browser;
-import mob_insurance.processor.TestResult;
-import mob_insurance.common_lib.LoadProperty;
+import mob_insurance.listeners.TestData;
+import mob_insurance.listeners.TestResult;
 import mob_insurance.functions.CoreRepository;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import mob_insurance.common_lib.LoadProperty;
-import mob_insurance.functions.TestBase;
-import mob_insurance.functions.CoreRepository;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-
 import com.google.common.base.Predicate;
-import mob_insurance.common.teststep.InsuranceField;
-import mob_insurance.io.TestData;
-import mob_insurance.processor.TestResult;
-
-import org.testng.annotations.Parameters;
-import org.apache.commons.lang.StringUtils;
 
 public class AddClientContractDetails extends TestBase{
 	CoreRepository coreFunc=null;
 	Boolean assertEnabled = false;
-	//String locatorType=null;
-	//String[] locator=null;
+	
 	@Test
 	public void AddClientAndContract() throws Exception{
 	try
@@ -75,12 +44,8 @@ public class AddClientContractDetails extends TestBase{
 			//create instance of class core
 			coreFunc = new CoreRepository();
 			//Assign webdriver driver to class core
-			coreFunc.setDriver(this.getDriver());
-			//navigate to specified URL
-			coreFunc.openURL();
-			//Login to application with specified credentials
-			coreFunc.Login();
-			waitForLoad();
+			coreFunc.setDriver(this.getDriver());			
+			
 			//Prepare test data
 			Object[][] testData=null;
 			testData=coreFunc.getTestData("AddClientContract.xls");
@@ -103,6 +68,7 @@ public class AddClientContractDetails extends TestBase{
 				String testname = (String) testData[tcNo][0];
 				System.out.println("testname : "+testname);
 				TestResult.addTestResult(testname,"");
+								
 				Reporter.log("S.No: " +tcNo+ " Test execution started for testID: "+testData[tcNo][0]);
 				boolean AddClientResult=false;
 				boolean AddClientContractResult=false;
@@ -116,6 +82,16 @@ public class AddClientContractDetails extends TestBase{
 				//Verify 'ExecuteTest' column value to identify whether test case need to execute or not
 				if(String.valueOf(testData[tcNo][1]).equalsIgnoreCase("TRUE")){
 					
+//					Open URL and Login will only be called when Login needs to be done							
+					if(String.valueOf(testData[tcNo][2]).equalsIgnoreCase("TRUE")){						
+						//navigate to specified URL				
+						coreFunc.openURL();
+						//Login to application with specified credentials
+						if(!coreFunc.Login()){
+							TestResult.appendTestResult();
+							continue;
+						}
+					}					
 					//Verify 'CreateClient' column value to identify whether client need to create or not
 					if(String.valueOf(testData[tcNo][3]).equalsIgnoreCase("TRUE")){
 						AddClientResult= AddClient(testData[tcNo]);						
@@ -191,6 +167,11 @@ public class AddClientContractDetails extends TestBase{
 					{
 						coreFunc.logData("CreateClientAndContract",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
+					}
+					
+					boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[tcNo][98]));
+					if(needToLogOut){
+					  coreFunc.Logout();					  
 					}
 					getDriver().navigate().refresh();
 					waitForLoad();
@@ -955,11 +936,11 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Verify existing contract count");
 			System.out.println("Debug log : Contract count before adding :  "+ contractcountB.getText());
 			int contractCountbefore = Integer.parseInt(contractcountB.getText());
-			System.out.println("Debug log : 1 ");			
+			//System.out.println("Debug log : 1 ");			
 			Thread.sleep(3000);
 			//select first record
 			getDriver().findElement(By.xpath(LoadProperty.getVar("firstRecord", "element"))).click();
-			System.out.println("Debug log : 2 ");			
+			//System.out.println("Debug log : 2 ");			
 			
 			Thread.sleep(5000);
 			
@@ -969,12 +950,16 @@ public class AddClientContractDetails extends TestBase{
 				 eleContractTab.click();
 				 TestResult.addTestResult(testStep,"Passed");
 				 
+				 coreFunc.waitForWhile(7);
 				 testStep="Click Create Contract button.";
 				 locator=ManageLocator.getLocator("Tab.Client.Contract.Button.Create");
-				 WebElement eleCreateButton=coreFunc.findElement(locator[0],locator[1]);
-				 eleCreateButton.click();
+				// WebElement eleCreateButton=coreFunc.findElement(locator[0],locator[1]);
+				 //eleCreateButton.click();
+				 coreFunc.ClickOnActionButton("Create");
 				 TestResult.addTestResult(testStep,"Passed");
-				 coreFunc.waitForWhile(5);
+				 
+				 coreFunc.waitForWhile(10);
+				 
 				 locator=ManageLocator.getLocator("Create.Contract.Category");
 				 WebElement eleCategory=coreFunc.findElement(locator[0],locator[1]);
 				 eleCategory.click(); 
@@ -1202,7 +1187,6 @@ public class AddClientContractDetails extends TestBase{
 					   TestResult.addTestResult(testStep,"Failed","Unable to select on designated insurance type.");	
 					   return;
 					}
-					System.out.println("Debug log : moduleName "+insuranceType);
 					String moduleName=LoadProperty.getVar(insuranceType, "MappingModule");
 					System.out.println("Debug log : moduleName "+moduleName);
 					if(moduleName != null && !moduleName.trim().isEmpty()){

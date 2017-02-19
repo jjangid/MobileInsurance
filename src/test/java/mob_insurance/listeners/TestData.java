@@ -1,4 +1,4 @@
-package mob_insurance.io;
+package mob_insurance.listeners;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,11 +21,11 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.Sleeper;
 
-import mob_insurance.common.teststep.InsuranceField;
+import mob_insurance.io.InsuranceField;
+import mob_insurance.io.ManageConfig;
 
 
-public class TestData {
-   
+public class TestData {   
 
 	Map<Integer,Map<String,String>> mapTestData=null;
 	
@@ -92,15 +92,15 @@ public class TestData {
 				CellReference cellRef=new CellReference(objTDRef.columnLabel.toUpperCase()+r);
 				cRow=sheet.getRow(cellRef.getRow());
 				if(cRow==null){continue;}
-				String insuranceType=cRow.getCell(0).getStringCellValue();
+				String insuranceType=cRow.getCell(1).getStringCellValue();
 				if(!insuranceType.trim().equalsIgnoreCase(insType) || cRow.getCell(cellRef.getCol()) == null || cRow.getCell(cellRef.getCol()).getCellType() == Cell.CELL_TYPE_BLANK){
 					continue;
 				}
-				Cell tabCell=cRow.getCell(1);
-				if(tabCell != null && tabCell.getStringCellValue().length() > 0){
-					System.out.println("Info: "+cRow.getCell(2).getStringCellValue()+" field ignored while reading it from Test Data file.");
-					continue;
-				}
+				Cell tabCell=cRow.getCell(2);
+			    if(tabCell != null && tabCell.getStringCellValue().length() > 0){
+			     System.out.println("Info: "+cRow.getCell(3).getStringCellValue()+" field ignored while reading it from Test Data file.");
+			     continue;
+			    }
 				
 				Cell cellSequence=cRow.getCell(0);
 				Integer sequence=-1;

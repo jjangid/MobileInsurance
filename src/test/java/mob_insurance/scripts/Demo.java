@@ -1,4 +1,4 @@
-package mob_insurance.testsuite;
+package mob_insurance.scripts;
 
 import java.util.List;
 import java.util.Map;

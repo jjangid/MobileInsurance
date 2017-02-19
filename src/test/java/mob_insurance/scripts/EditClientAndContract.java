@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
-import mob_insurance.common_lib.LoadProperty;
 import mob_insurance.functions.TestBase;
+import mob_insurance.io.LoadProperty;
 import mob_insurance.functions.CoreRepository;
 
 import org.openqa.selenium.By;

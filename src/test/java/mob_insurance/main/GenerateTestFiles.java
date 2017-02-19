@@ -4,10 +4,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import mob_insurance.io.ManageConfig;
-import mob_insurance.io.TestData;
-import mob_insurance.processor.TestResult;
-//import mob_insurance.testsuite.AgentSettingTestSuite;
-import mob_insurance.testsuite.ManageInsuranceField;
+import mob_insurance.io.ManageInsuranceField;
+import mob_insurance.listeners.TestData;
+import mob_insurance.listeners.TestResult;
 
 public class GenerateTestFiles {
 

@@ -18,8 +18,8 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import mob_insurance.functions.CoreRepository;
 import jxl.write.WriteException;
-import mob_insurance.common.teststep.InsuranceField;
-import mob_insurance.common_lib.LoadProperty;
+import mob_insurance.io.InsuranceField;
+import mob_insurance.io.LoadProperty;
 import mob_insurance.io.ManageLocator;
 
 import org.apache.http.HttpHost;
@@ -228,7 +228,7 @@ public class TestBase extends Bean {
 				   throw new Exception("Error: You can run test script only on Firefox and Chrome browser. Support is unavailable for other browsers. ");
 				
 			getDriver().manage().window().maximize();
-			getDriver().manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);	
+			//getDriver().manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);	
 			return getDriver();
 		}
 		catch (Exception e)

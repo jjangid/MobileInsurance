@@ -1,4 +1,4 @@
-package mob_insurance.processor;
+package mob_insurance.listeners;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -113,7 +113,7 @@ public class TestResult {
 	}
 	
 	public static void resetListTestResult(){
-	     if(!lsTestResult.isEmpty()){
+		if(!lsTestResult.isEmpty()){
 	        lsTestResult=new ArrayList<String[]>();
 	     }
 	}

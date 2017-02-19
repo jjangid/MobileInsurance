@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
@@ -25,85 +24,91 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Duration;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
-
 import com.google.common.base.Function;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.write.WriteException;
-import mob_insurance.common.teststep.InsuranceField;
-import mob_insurance.common_lib.LoadProperty;
+import mob_insurance.io.InsuranceField;
+import mob_insurance.io.LoadProperty;
 import mob_insurance.io.ManageLocator;
-import mob_insurance.processor.Browser;
-import mob_insurance.processor.TestResult;
+import mob_insurance.listeners.TestResult;
 
 public class CoreRepository extends TestBase {
 
-	private WebElement element;
 	private WebDriver driver = null;
 	private int flag = 0; // Indicator of pass/ fail i.e. if flag=1
-	private String s_flag = null;
-
 	private Long splittedText;
-	private String originalWindowHandle;
+
 	/* This method is used to Login in system */
 	public boolean Login() throws IOException {
 		boolean isLogin = false;
+		String testStep="Login into the application.";
 		try {
-			Thread.sleep(10000);
+			waitForWhile(5);
 			String languageCode=LoadProperty.getVar("loginLanguage", "data");
-//			selectLanguage(languageCode);
-//			getDriver().findElement(By.cssSelector(LoadProperty.getVar("languageDD_CSS", "element"))).click();
-//			getDriver().findElement(By.id(LoadProperty.getVar("languageDD_ID", "element"))).sendKeys(Keys.ARROW_DOWN);
-//			
-//			WebElement item = getDriver().findElement(By.xpath(LoadProperty.getVar("languageDD", "element")));
-//		     if (item.isEnabled() && item.isDisplayed()){
-//		          item.click();
-//		      }  
-		    //Thread.sleep(20000);
+			selectLanguage(languageCode);
+			testStep="Select Language '"+languageCode+"' on Language dropdown.";
+			TestResult.addTestResult(testStep,"Passed");
+
 			//enter username
-			WebElement userName = getDriver().findElement(By.name(LoadProperty.getVar("username", "element")));
+			WebElement userName = findElement("name",LoadProperty.getVar("username", "element"));
 			userName.clear();
 			userName.sendKeys(LoadProperty.getVar("loginName", "data"));
+			testStep="Enter UserName '"+LoadProperty.getVar("loginName", "data")+"' on UserName textbox.";
+			TestResult.addTestResult(testStep,"Passed");
 			
 			//enter password
-			WebElement password = getDriver().findElement(By.name(LoadProperty.getVar("password", "element")));
+			WebElement password = findElement("name",LoadProperty.getVar("password", "element"));
 			password.clear();
 			password.sendKeys(LoadProperty.getVar("loginPassword", "data"));
-			
-			Thread.sleep(2000);
+			testStep="Enter Password '"+LoadProperty.getVar("loginPassword", "data")+"' on Password textbox.";
+			TestResult.addTestResult(testStep,"Passed");
 			
 			//click on login btn
-			WebElement loginBtn = getDriver().findElement(By.linkText(LoadProperty.getVar("login_Btn", "element")));
+			WebElement loginBtn = findElement("linkText",LoadProperty.getVar("login_Btn", "element"));
 			loginBtn.click();
+			testStep="Click on Login Button";
 			
-			Thread.sleep(10000);
-			
+			TestResult.addTestResult(testStep,"Passed");
+		    waitForWhile(5);	
+		    
 			isLogin=true;
+			testStep="Login into the application.";
+			TestResult.addTestResult(testStep,"Passed");
 						
 		} catch (Exception e) {
 			e.printStackTrace();
+			TestResult.addTestResult(testStep,"Failed","Error occured while login into app.");
 		}
 		return isLogin;
 
+	}
+	
+	public boolean Logout(){
+		try{
+			  WebElement logOutButton = findElement("xpath",LoadProperty.getVar("Button.Logout", "element"));
+			  logOutButton.click();
+			  TestResult.addTestResult("Logout from application.","Passed");
+		}catch(Exception e){
+			TestResult.addTestResult("Logout into application","Failed","- Error: Refer output logs for more information.");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean selectLanguage(String languageCode) {		 
@@ -143,18 +148,6 @@ public class CoreRepository extends TestBase {
 	 }
 	
 	
-	/* This method is used to Logout in system */
-	public boolean Logout() throws IOException {
-		boolean isLogout = false;
-		try {
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return isLogout;
-
-	}
-	
 	/* This method is used to select values from dropdown */
 	public boolean SelectValueInDropdown(String value) throws IOException {
 		boolean isValueSelected = false;
@@ -180,10 +173,10 @@ public class CoreRepository extends TestBase {
 		{
 			value = GetDELanguageText(value);			
 			List<WebElement> buttonObj = getDriver().findElements(By.xpath(LoadProperty.getVar("saveBtnList", "element")));
-			System.out.println("Debug log ClickOnActionButton Size==>"+buttonObj.size());
+//			System.out.println("Debug log ClickOnActionButton Size==>"+buttonObj.size());
 			for (int i = 0; i <buttonObj.size() ; i++) {
 			    WebElement item = buttonObj.get(i);
-			    System.out.println("Debug ClickOnActionButton text==>"+item.getText());
+//			    System.out.println("Debug ClickOnActionButton text==>"+item.getText());
 				if (item.isDisplayed() && item.isEnabled() && item.getText().equals(value)) {
 						item.click();
 				        isValueClicked =true;
@@ -560,7 +553,9 @@ public class CoreRepository extends TestBase {
 
 	public void openURL() {
 		String baseUrl = LoadProperty.getVar("baseUrl","data");
+		
 		getDriver().get(baseUrl);
+		TestResult.addTestResult("Open URL as "+baseUrl,"Passed");
 	}
 	
 	public WebElement findElement(String locatorType,String locatorValue){
