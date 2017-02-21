@@ -11,7 +11,6 @@ import java.util.Properties;
 public class LoadProperty {
 
 	static String var = null;
-	private static Properties prpMappingModule=null;
 
 	public static String getVar(String key,String file) {
 		Properties props = new Properties();
@@ -52,19 +51,6 @@ public class LoadProperty {
 			e.printStackTrace();
 		}
 		return var;
-	}
-	
-	private static void loadMappingModule(String path){
-		if(prpMappingModule==null){
-			prpMappingModule = new Properties();
-			try {
-				prpMappingModule.load(new FileInputStream(path));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
 	}
 
 }

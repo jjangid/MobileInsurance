@@ -7,7 +7,10 @@
 <test name="MI_Test_Cycle_1">
 	<parameter name="browser" value="chrome"/>
 	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/><!-- 
+	<class name="mob_insurance.scripts.AddClientContractDetails"/>
+	<class name="mob_insurance.scripts.InsuranceOffer"/>
+	<class name="mob_insurance.scripts.DeleteClientAndContract"/>
+	 <!-- 
 	<class name="mob_insurance.scripts.AddClientContractDetails"/>
 	<class name="mob_insurance.scripts.AgentSettingUploadFile"/>
 	<class name="mob_insurance.scripts.DeleteClientAndContract"/>
@@ -23,61 +26,6 @@
 	<class name="mob_insurance.scripts.DeleteClientAndContract" />
 	</classes> 
 </test>
-<test name="MI_Test_Cycle_3">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_4">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_5">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_6">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_7">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_8">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_9">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>
-<test name="MI_Test_Cycle_10">
-	<parameter name="browser" value="chrome"/>
-	<classes>
-	<class name="mob_insurance.scripts.AddClientContractDetails"/>
-	<class name="mob_insurance.scripts.DeleteClientAndContract" />
-	</classes> 
-</test>-->
+-->
 </suite>
 

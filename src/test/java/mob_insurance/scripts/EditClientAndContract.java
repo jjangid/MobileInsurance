@@ -1,38 +1,19 @@
 /*Common Test*/
 package mob_insurance.scripts;
 
-import java.io.File;
-import java.util.Random;
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
 import mob_insurance.functions.TestBase;
 import mob_insurance.io.LoadProperty;
 import mob_insurance.functions.CoreRepository;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-import org.testng.annotations.Parameters;
-import org.apache.commons.lang.StringUtils;
+
 
 public class EditClientAndContract extends TestBase{
 	CoreRepository coreFunc = null;
@@ -88,7 +69,7 @@ public class EditClientAndContract extends TestBase{
 			getDriver().manage().timeouts().implicitlyWait(elementTimeOut, TimeUnit.SECONDS);
 			Reporter.log("Enter Client Data");
 			//Enter client data
-			String name =  coreFunc.generateName();
+			/*String name =  coreFunc.generateName();
 			System.out.println(name);
 			String email = name+"@ittechnocrats.com";
 			System.out.println(email);		
@@ -115,7 +96,7 @@ public class EditClientAndContract extends TestBase{
 			getDriver().findElement(By.name("email")).clear();
 			getDriver().findElement(By.name("email")).sendKeys(email);
 			getDriver().findElement(By.name("mobile")).clear();
-			getDriver().findElement(By.name("mobile")).sendKeys(coreFunc.generateNumber());
+			getDriver().findElement(By.name("mobile")).sendKeys(coreFunc.generateNumber());*/
 			
 			//Click on save client button
 			getDriver().findElement(By.xpath("html/body/div[2]/div[2]/div/div/div/div/div[3]/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/a[3]")).click();
@@ -150,8 +131,8 @@ public class EditClientAndContract extends TestBase{
 			getDriver().manage().timeouts().implicitlyWait(elementTimeOut, TimeUnit.SECONDS);
 			getDriver().findElement(By.name("provider_id")).sendKeys(Keys.ENTER);
 			getDriver().manage().timeouts().implicitlyWait(elementTimeOut, TimeUnit.SECONDS);
-			getDriver().findElement(By.name("insurance_number")).clear();
-			getDriver().findElement(By.name("insurance_number")).sendKeys(coreFunc.generateNumber());
+			//getDriver().findElement(By.name("insurance_number")).clear();
+			//getDriver().findElement(By.name("insurance_number")).sendKeys(coreFunc.generateNumber());
 			getDriver().findElement(By.name("payment")).clear();
 			getDriver().findElement(By.name("payment")).sendKeys("1222");
 			getDriver().findElement(By.name("duration_months")).clear();

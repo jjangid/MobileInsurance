@@ -116,12 +116,12 @@ public class InsuranceOffer extends TestBase{
     		
     		Reporter.log("Search client by Email Id :  "+email); 
     		System.out.println("Search client by Email Id :  "+email);
-    		Thread.sleep(10000);
+    		coreFunc.waitForWhile(10);
 			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).clear();
 			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).sendKeys(email);
 			
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
-			
+			coreFunc.waitForWhile(8);
 			//Verify client found or not with specified name in grid 
 			WebElement recordcount =  getDriver().findElement(By.xpath(LoadProperty.getVar("recordCount", "element")));
 			if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
@@ -133,24 +133,23 @@ public class InsuranceOffer extends TestBase{
 			
 			TestResult.addTestResult(testStep,"Passed");
 //			Save current contract count
-            
 			String contractCountLocator=LoadProperty.getVar("Client.Contract.count", "element");
 			WebElement eleContractCount=coreFunc.findElement("xpath", contractCountLocator);
 			int contractCount=Integer.valueOf(eleContractCount.getText());
 			System.out.println("Client contract count: "+contractCount);
 			Reporter.log("Client found with details Email Id :  "+email);
 			
-			Thread.sleep(5000);
 			//select first record
 			testStep="Click on client record";
 			System.out.println("Click on client record");
 			getDriver().findElement(By.xpath(LoadProperty.getVar("firstRecord", "element"))).click();
 			TestResult.addTestResult(testStep,"Passed");
-				
+			Reporter.log(testStep +"  ==>  Step Pass");
+			
 			WebDriverWait clientGridWait = new WebDriverWait(getDriver(), 45);
 			clientGridWait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("email", "element"))));
 				
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(5);
 			
 			//click on tarif calc tab
 			testStep="Click Tarif Calculator Tab";
@@ -158,11 +157,10 @@ public class InsuranceOffer extends TestBase{
 //			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
 			getDriver().findElement(By.xpath(LoadProperty.getVar("tarifcalculator", "element"))).click();
 			TestResult.addTestResult(testStep,"Passed");
-			Reporter.log("Clicked on tab :  "+LoadProperty.getVar("tarifcalculator", "element"));
+			//Reporter.log(testStep +"  ==>  Step Pass");
+			Reporter.log("Clicked on tab :  "+LoadProperty.getVar("tarifcalculator", "element")+"  ==>  Step Pass");
 			
-			Thread.sleep(5000);
-			
-			
+			coreFunc.waitForWhile(5);
 			
 			//Click Insurance Category tab
 			
@@ -173,7 +171,8 @@ public class InsuranceOffer extends TestBase{
 			insCategoryLocator=insCategoryLocator.replaceAll("@category", insuranceCategory);
 			TestResult.addTestResult(testStep,"Passed");
 			getDriver().findElement(By.xpath(insCategoryLocator)).click();
-						
+			Reporter.log(testStep +"  ==>  Step Pass");
+			
 			//click on Insurance Type tab
 			String insuranceType=String.valueOf(testData[5]);
 			testStep="Click "+insuranceType+" insurance type.";
@@ -185,7 +184,7 @@ public class InsuranceOffer extends TestBase{
 			TestResult.addTestResult(testStep,"Passed");
 			Reporter.log("Clicked on tab :  "+LoadProperty.getVar("composit", "element"));
 			
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(5);
 			
 			//click on send button
 			testStep="Click Send button";
@@ -297,12 +296,13 @@ public class InsuranceOffer extends TestBase{
 //			Search client again
 			testStep="Verify no of contract attached with client assocated with "+email+".";
 			System.out.println(testStep);
-			Thread.sleep(10000);
+			coreFunc.waitForWhile(5);
 			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).clear();
 			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).sendKeys(email);
 			
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
-
+			
+			coreFunc.waitForWhile(2);
 //			Get Contract count
 			eleContractCount=coreFunc.findElement("xpath", contractCountLocator);
 			int cCount=Integer.valueOf(eleContractCount.getText());
@@ -312,7 +312,7 @@ public class InsuranceOffer extends TestBase{
 			}else{
 				TestResult.addTestResult(testStep,"Failed","Current contract count: "+cCount+" and Initial contract count: "+contractCount);
 			}
-			
+			coreFunc.waitForWhile(1);
 			boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[6]));
 			if(needToLogOut){
 			  String logOutLocator=LoadProperty.getVar("Button.Logout", "element");

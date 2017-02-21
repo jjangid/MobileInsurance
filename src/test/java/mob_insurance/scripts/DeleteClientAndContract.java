@@ -1,37 +1,20 @@
 /*DeleteClientAndContract*/
 package mob_insurance.scripts;
-import java.io.File;
-import java.util.Random;
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
 import mob_insurance.functions.TestBase;
 import mob_insurance.io.LoadProperty;
+import mob_insurance.listeners.TestResult;
 import mob_insurance.functions.CoreRepository;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-import org.testng.annotations.Parameters;
-import org.apache.commons.lang.StringUtils;
+
 
 public class DeleteClientAndContract extends TestBase{
 	CoreRepository coreFunc=null;
@@ -51,10 +34,7 @@ public class DeleteClientAndContract extends TestBase{
 			coreFunc = new CoreRepository();
 			//Assign webdriver driver to class core
 			coreFunc.setDriver(this.getDriver());
-			//navigate to specified URL
-			coreFunc.openURL();
-			//Login to application with specified credentials
-			coreFunc.Login();
+		
 			//Prepare test data
 			Object[][] testData=null;
 			testData=coreFunc.getTestData("DeleteClientContract.xls");
@@ -69,17 +49,33 @@ public class DeleteClientAndContract extends TestBase{
 			for(int tcNo=0;tcNo<testData.length;tcNo++)
 			{
 				Reporter.log("*******************************************************************************************");
+				TestResult.resetListTestResult();
 				if((testData[tcNo][0])==null){					
 					Reporter.log("Test case not found in test data sheet");
 					Assert.assertEquals(false, true, "Test case not found in test data sheet");					
-				}				
+				}
+				String testname = (String) testData[tcNo][0];
+				System.out.println("testname : "+testname);
+				TestResult.addTestResult(testname,"");
 				Reporter.log("S.No: " +tcNo+ " Test execution started for testID: "+testData[tcNo][0]);
+				
 				boolean DeleteContract=false;
 				boolean DeleteClient=false;				
 						
 				System.out.println("Test Case ID : "+testData[tcNo][0]);
 				//Verify 'ExecuteTest' column value to identify whether test case need to execute or not
 				if(String.valueOf(testData[tcNo][1]).equalsIgnoreCase("TRUE")){
+					
+					//Open URL and Login will only be called when Login needs to be done							
+					if(String.valueOf(testData[tcNo][2]).equalsIgnoreCase("TRUE")){						
+						//navigate to specified URL				
+						coreFunc.openURL();
+						//Login to application with specified credentials
+						if(!coreFunc.Login()){
+							TestResult.appendTestResult();
+							continue;
+						}
+					}			
 					
 					//Verify 'DeleteContract' column value to identify whether client need to create or not
 					if(String.valueOf(testData[tcNo][4]).equalsIgnoreCase("TRUE")){
@@ -105,7 +101,12 @@ public class DeleteClientAndContract extends TestBase{
 					{
 						coreFunc.logData("DeleteClientContract",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
-					}					
+					}
+					boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[tcNo][6]));
+					if(needToLogOut){
+					  coreFunc.Logout();					  
+					}	
+					TestResult.appendTestResult();
 				}
 				else
 				{					
@@ -149,6 +150,7 @@ public class DeleteClientAndContract extends TestBase{
 			System.out.println("Debug log :  DeleteContract "+ recordcount.getText());
 			if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
 				Reporter.log("Unable to delete contract due to Client not found with Email Id :  "+email);
+				TestResult.addTestResult("Unable to delete contract due to Client not found with Email Id :  "+email,"Failed");
 				coreFunc.logData("DeleteContract",testID,"Failed","Unable to delete contract due to Client not found with Email Id :  "+email+"  [ TCID: "+testID+"]",assertEnabled);					
 	    		return false;
 			}
@@ -162,6 +164,7 @@ public class DeleteClientAndContract extends TestBase{
 			if(contractcount.getText().equalsIgnoreCase("0"))
 			{
 				Reporter.log("Unable to delete contract due to no contract found for Email Id :  "+email);
+				TestResult.addTestResult("Unable to delete contract due to no contract found for Email Id :  "+email,"Failed");
 				coreFunc.logData("DeleteContract",testID,"Failed","Unable to delete contract due to no contract found for Email Id :  "+email+"  [ TCID: "+testID+"]",assertEnabled);					
 	    		return false;			
 			}
@@ -179,18 +182,19 @@ public class DeleteClientAndContract extends TestBase{
 			//select contract for deletion
 			getDriver().findElement(By.xpath(LoadProperty.getVar("firstContract", "element"))).click();
 			Thread.sleep(10000);
-			
+			TestResult.addTestResult("First contract selected for Client "+email,"Passed");
 			//wait till contract details has been loading
 			WebDriverWait contractWait = new WebDriverWait(getDriver(), 60);
 			contractWait.until(ExpectedConditions.visibilityOfElementLocated(By.name("category")));
 			
 			//click on delete contract button
 			coreFunc.ClickOnActionButton("Delete");
+			TestResult.addTestResult("Click on 'Delete' button","Passed");
 			
 			//click on ok button
 			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
 			getDriver().findElement(By.id(LoadProperty.getVar("okPopup", "element"))).click();
-			    		
+			   		
     		//Get data for contract
     	
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
@@ -208,10 +212,12 @@ public class DeleteClientAndContract extends TestBase{
 					
 			if(contractCountAfter == (contractCountbefore-1))
 			{
-				Reporter.log("Contract deletes successfully for client Email Id :  "+email);
+				Reporter.log("Contract deleted successfully for client Email Id :  "+email);
+				TestResult.addTestResult("Contract deleted successfully for client Email Id : "+email,"Passed");
 			}
 			else
 			{
+				TestResult.addTestResult("Contract not deleted successfully for client Email Id : "+email,"Failed");
 				coreFunc.logData("DeleteContract",testID,"Failed","Error: Contract not deleted successfully for Test Case [ TCID: "+testID+"]",assertEnabled);
 				return false;
 			}
@@ -261,16 +267,19 @@ public class DeleteClientAndContract extends TestBase{
 				Thread.sleep(3000);
 				clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 				Thread.sleep(3000);
-							
+								
 				//Verify client found or not with specified name in grid
 				WebElement recordcount =  getDriver().findElement(By.xpath(LoadProperty.getVar("recordCount", "element")));
 				System.out.println("Debug log : Case verify text :  "+ recordcount.getText());
 				if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
-		    		coreFunc.logData("DeleteClient",testID,"Failed","Error: No Client found with Email ID : "+email+"  [ TCID: "+testID+"]",assertEnabled);					
+					
+					TestResult.addTestResult("Client not found for deletion Email ID : "+email ,"Failed");
+					coreFunc.logData("DeleteClient",testID,"Failed","Error: No Client found with Email ID : "+email+"  [ TCID: "+testID+"]",assertEnabled);					
 		    		return false;
 				}
 				else{
-					Reporter.log("Client found with Email ID : "+email);
+					Reporter.log("Client found with Email ID : "+email+" ==>  Step Pass");
+					TestResult.addTestResult("Client found for deletion with Email ID : "+email ,"Passed");
 				}
 				//select first record
 				getDriver().findElement(By.xpath(LoadProperty.getVar("firstRecord", "element"))).click();
@@ -284,10 +293,14 @@ public class DeleteClientAndContract extends TestBase{
 				
 				//click on delete button
 				coreFunc.ClickOnActionButton("Delete");
+				Reporter.log("Clicked on Delete button. ==>  Step Pass");
+				TestResult.addTestResult("Clicked on Delete button. ","Passed");
 				
 				//click on ok button
 				getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
 				getDriver().findElement(By.id(LoadProperty.getVar("okPopup", "element"))).click();
+				Reporter.log("Clicked on 'OK' button. ==>  Step Pass");
+				TestResult.addTestResult("Clicked on 'Ok' button. ","Passed");
 				
 				Reporter.log("After Deletion  ==> Search client by Email Id :  "+email);
 				Thread.sleep(5000);
@@ -299,10 +312,12 @@ public class DeleteClientAndContract extends TestBase{
 				WebElement recordcountADel =  getDriver().findElement(By.xpath(LoadProperty.getVar("recordCount", "element")));
 				System.out.println("Debug log : Case verify text :  "+ recordcountADel.getText());
 				if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
-		    		Reporter.log("Client Deleted for ==> Email Id :  "+email); 
+		    		Reporter.log("Client Deleted for ==> Email Id :  "+email);
+		    		TestResult.addTestResult("Client Deleted for ==> Email Id :  "+email,"Passed");
 				}
 				else
 				{
+					TestResult.addTestResult("Client not Deleted for ==> Email Id :  "+email,"Failed");
 					coreFunc.logData("DeleteClient",testID,"Failed","Error: Client found with Email ID : "+email+"  [ TCID: "+testID+"]",assertEnabled);
 					return false;
 				}				

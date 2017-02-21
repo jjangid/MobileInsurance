@@ -14,7 +14,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 import java.util.concurrent.TimeUnit;
 import mob_insurance.functions.CoreRepository;
 import jxl.write.WriteException;
@@ -29,7 +29,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;

@@ -20,7 +20,6 @@ public class AgentSettingUploadFile extends TestBase{
 	String locatorType=null;
 	String locator=null;
 	private Map<String,String> mapTestData=null;
-	private String languageCode="";
 		 	
 	@Test
 	public void AgentSettingUploadFileTest() throws Exception{
@@ -118,7 +117,8 @@ public class AgentSettingUploadFile extends TestBase{
 			 String[] locator=ManageLocator.getLocator("Menu.AgentSetting");
 			 WebElement eleMenuAgentSetting=coreFunc.findElement(locator[0], locator[1]);
 			 eleMenuAgentSetting.click();
-			 TestResult.addTestResult("Click Agent Setting menu option","Passed");		
+			 TestResult.addTestResult("Click Agent Setting menu option","Passed");
+			 Reporter.log("Click Agent Setting menu option ==> Step Passed");
 		 }catch(Exception e){
 			 TestResult.addTestResult("Click Agent Setting menu option","Failed","- Error occured while clicking on Agent Setting menu");
 		     throw e;
@@ -130,7 +130,8 @@ public class AgentSettingUploadFile extends TestBase{
 			 String[] locator=ManageLocator.getLocator("Menu.AgentSetting.DataImport");
 			 WebElement eleDataImport=coreFunc.waitUntilElementToBeVisible(locator[0], locator[1]);
 			 eleDataImport.click();		 
-			 TestResult.addTestResult("Click Data Import menu option","Passed");	
+			 TestResult.addTestResult("Click Data Import menu option","Passed");
+			 Reporter.log("Click Data Import menu option ==> Step Passed");
 		 }catch(Exception e){
 			 TestResult.addTestResult("Click Data Import menu option","Failed","- Error occured while clicking on Data Import menu");
 		     throw e;
@@ -151,10 +152,12 @@ public class AgentSettingUploadFile extends TestBase{
 			 WebElement eleBadErrorPop=coreFunc.getDriver().switchTo().activeElement();
 			 if(eleBadErrorPop.getText().toLowerCase().contains("ok")){
 				 TestResult.addTestResult("Upload File","Failed","- There is some problem with browsed file.");
+				 Reporter.log("Upload File - There is some problem with browsed file ==> Step Failed");
 				 System.out.println("Info: There is some problem with browsed file.");
 				 return;
 			 }
 			 TestResult.addTestResult("Upload file","Passed");
+			 Reporter.log("Upload file ==> Step Passed");
 			 coreFunc.waitForElementToBeInvisible(locator[0], locator[1]);
 		 }catch(Exception e){
 			 TestResult.addTestResult("Upload file","Failed","- Error occured while uploading the file.");
@@ -168,6 +171,7 @@ public class AgentSettingUploadFile extends TestBase{
 			  WebElement eleImportButton=coreFunc.waitUntilElementToBeVisible(locator[0], locator[1]);
 			  eleImportButton.click();	
 			  TestResult.addTestResult("Click Import button","Passed");
+			  Reporter.log("Click Import button ==> Step Passed");
 		 }catch(Exception e){
 			 TestResult.addTestResult("Click Import button","Failed","- Error occured while clicking on import button.");
 		     throw e;
@@ -186,10 +190,12 @@ public class AgentSettingUploadFile extends TestBase{
 				
 				 if((status.equalsIgnoreCase(mapTestData.get("Expected: Import Status").trim()))){
 					 TestResult.addTestResult("Verify Import Status","Passed");	 
+					 Reporter.log("Verify Import Status ==> Step Passed");
 				 }else{
 					 TestResult.addTestResult("Verify Import Status","Failed","- Current import status: "+status+" and Expected status: "+mapTestData.get("Expected: Import Status").trim()+".");
 				 }
          }catch(Exception e){
+        	 Reporter.log("Verify Import Status - Error occured in verification import status. ==> Step Failed");
         	 TestResult.addTestResult("Verify Import Status","Failed","- Error occured in verification import status.");
 		     throw e;
 		 }
