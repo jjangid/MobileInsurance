@@ -84,9 +84,11 @@ public class AgentSettingUploadFile extends TestBase{
 		 try{
 		    			   
 		    	System.out.println("Info: Loging into application with credential specified in Test Data file.");
-		    	boolean needToLogin=Boolean.valueOf(String.valueOf(mapTestData.get("Login").trim()));
+		    	String loginText = String.valueOf(mapTestData.get("Login").trim());
+				String[] loginVariable = coreFunc.GetLoginRole(loginText);
+				boolean needToLogin=Boolean.valueOf(loginVariable[0]);
 				if(needToLogin){
-				  coreFunc.Login();					  
+				  coreFunc.Login(loginVariable[1]);					  
 				}		    	
 			    System.out.println("Info: Navigating to Import page.");
 			    clickAgentSettingMenu();

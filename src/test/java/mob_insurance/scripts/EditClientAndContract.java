@@ -35,11 +35,10 @@ public class EditClientAndContract extends TestBase{
 			//Assign webdriver driver to class core
 			coreFunc.setDriver(this.getDriver());	
 			Reporter.log("Navigate to specified URL");
-			//navigate to specified URL
-			coreFunc.openURL();
+		
 			//Call login function to login in mobile insurance application
 			Reporter.log("Performed Login on Application");
-			coreFunc.Login();
+			//coreFunc.Login();
 			
 			Reporter.log("Edit Client details started...");			
 			Reporter.log("Search client by Last Name ");

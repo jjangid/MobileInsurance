@@ -54,10 +54,47 @@ public class CoreRepository extends TestBase {
 	private Long splittedText;
 
 	/* This method is used to Login in system */
-	public boolean Login() throws IOException {
+	public boolean Login(String Role) throws IOException {
 		boolean isLogin = false;
 		String testStep="Login into the application.";
 		try {
+			String uname = "";
+			String pword = "";
+			String urlPath ="";
+			
+			if((Role.trim()).equalsIgnoreCase("DevAdmin"))
+			{
+				uname = LoadProperty.getVar("Dev.Admin.loginName", "data");
+				pword = LoadProperty.getVar("Dev.Admin.loginPassword", "data");
+				urlPath =  LoadProperty.getVar("Dev.Admin.baseUrl", "data");
+			}
+			else if((Role.trim()).equalsIgnoreCase("DevAgent"))
+			{
+				uname = LoadProperty.getVar("Dev.Agent.loginName", "data");
+				pword = LoadProperty.getVar("Dev.Agent.loginPassword", "data");
+				urlPath =  LoadProperty.getVar("Dev.Agent.baseUrl", "data");
+			}
+			else if((Role.trim()).equalsIgnoreCase("StageAgent"))
+			{
+				uname = LoadProperty.getVar("Stage.Agent.loginName", "data");
+				pword = LoadProperty.getVar("Stage.Agent.loginPassword", "data");
+				urlPath =  LoadProperty.getVar("Stage.Agent.baseUrl", "data");
+			}
+			else if((Role.trim()).equalsIgnoreCase("StageAdmin"))
+			{	
+				uname = LoadProperty.getVar("Stage.Admin.loginName", "data");
+				pword = LoadProperty.getVar("Stage.Admin.loginPassword", "data");
+				urlPath =  LoadProperty.getVar("Stage.Admin.baseUrl", "data");
+			}
+			else
+			{
+				uname = LoadProperty.getVar("Stage.Agent.loginName", "data");
+				pword = LoadProperty.getVar("Stage.Agent.loginPassword", "data");
+				urlPath =  LoadProperty.getVar("Stage.Agent.baseUrl", "data");
+			}
+			
+			//navigate to specified URL					
+			this.openURL(urlPath);
 			waitForWhile(5);
 			String languageCode=LoadProperty.getVar("loginLanguage", "data");
 			selectLanguage(languageCode);
@@ -67,15 +104,15 @@ public class CoreRepository extends TestBase {
 			//enter username
 			WebElement userName = findElement("name",LoadProperty.getVar("username", "element"));
 			userName.clear();
-			userName.sendKeys(LoadProperty.getVar("loginName", "data"));
-			testStep="Enter UserName '"+LoadProperty.getVar("loginName", "data")+"' on UserName textbox.";
+			userName.sendKeys(uname);
+			testStep="Enter UserName '"+uname+"' on UserName textbox.";
 			TestResult.addTestResult(testStep,"Passed");
 			
 			//enter password
 			WebElement password = findElement("name",LoadProperty.getVar("password", "element"));
 			password.clear();
-			password.sendKeys(LoadProperty.getVar("loginPassword", "data"));
-			testStep="Enter Password '"+LoadProperty.getVar("loginPassword", "data")+"' on Password textbox.";
+			password.sendKeys(pword);
+			testStep="Enter Password '"+pword+"' on Password textbox.";
 			TestResult.addTestResult(testStep,"Passed");
 			
 			//click on login btn
@@ -109,6 +146,24 @@ public class CoreRepository extends TestBase {
 			return false;
 		}
 		return true;
+	}
+	
+	public String[] GetLoginRole(String loginText){
+		 
+		 System.out.println("GetLoginRole, Login Text ->  "+loginText);			
+		 String[] arLocator =null;
+		 if(loginText.indexOf("-") == -1){
+			 arLocator=new String[2];
+			 arLocator[0]="TRUE";
+			 arLocator[1]="StageAgent";		 
+		 }
+		 else
+		 {
+			 arLocator=new String[3];
+			 arLocator[0]=loginText.substring(0, loginText.indexOf("-"));			 
+			 arLocator[1]=loginText.substring(loginText.indexOf("-")+1, loginText.length());			 
+		 }
+		 return arLocator;
 	}
 	
 	private boolean selectLanguage(String languageCode) {		 
@@ -551,9 +606,8 @@ public class CoreRepository extends TestBase {
 		this.driver = driver;
 	}
 
-	public void openURL() {
-		String baseUrl = LoadProperty.getVar("baseUrl","data");
-		
+	public void openURL(String baseUrl) {
+		//String baseUrl = LoadProperty.getVar("baseUrl","data");		
 		getDriver().get(baseUrl);
 		TestResult.addTestResult("Open URL as "+baseUrl,"Passed");
 	}

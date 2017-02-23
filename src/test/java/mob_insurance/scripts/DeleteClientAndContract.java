@@ -66,17 +66,19 @@ public class DeleteClientAndContract extends TestBase{
 				//Verify 'ExecuteTest' column value to identify whether test case need to execute or not
 				if(String.valueOf(testData[tcNo][1]).equalsIgnoreCase("TRUE")){
 					
-					//Open URL and Login will only be called when Login needs to be done							
-					if(String.valueOf(testData[tcNo][2]).equalsIgnoreCase("TRUE")){						
-						//navigate to specified URL				
-						coreFunc.openURL();
+		
+//					Open URL and Login will only be called when Login needs to be done					
+					String loginText = (String) testData[tcNo][2];
+					String[] loginVariable = coreFunc.GetLoginRole(loginText);
+					//Open URL and Login will only be called when Login needs to be done					
+					if(String.valueOf(loginVariable[0].trim()).equalsIgnoreCase("TRUE")){						
 						//Login to application with specified credentials
-						if(!coreFunc.Login()){
+						if(!coreFunc.Login(loginVariable[1])){
 							TestResult.appendTestResult();
 							continue;
 						}
-					}			
-					
+					}
+				
 					//Verify 'DeleteContract' column value to identify whether client need to create or not
 					if(String.valueOf(testData[tcNo][4]).equalsIgnoreCase("TRUE")){
 						DeleteContract= DeleteContract(testData[tcNo]);	
