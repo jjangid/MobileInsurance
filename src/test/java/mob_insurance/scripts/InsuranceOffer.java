@@ -74,28 +74,28 @@ public class InsuranceOffer extends TestBase{
 					
 					if(TarifCalc)
 					{
+						TestResult.addTestResult("InsuranceOfferTest Test Case : "+String.valueOf(testData[tcNo][0]),"Passed");
 						coreFunc.logData("InsuranceOfferTest",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
-					}
-					TestResult.appendTestResult();
+					}					
 				}
 				else
 				{					
+					TestResult.addTestResult("Test Case : "+String.valueOf(testData[tcNo][0]),"Skipped");
 					Reporter.log("Test execution of test case "+testData[tcNo][0]+" is skipped");
 					System.out.println("Test execution of test case "+testData[tcNo][0]+" is skipped");					
 				}
-				
+				TestResult.appendTestResult();
 			    Reporter.log("Test execution completed for testID: "+testData[tcNo][0]);
 			    Reporter.log("*******************************************************************************************");
-			}
-			
-			
+			}			
 		}
 		catch(Exception e){
+			TestResult.addTestResult("InsuranceOfferTest failed due to error occured","Failed");
+			TestResult.appendTestResult();
 			Reporter.log("Error: Test Case failed due to error occured");
 			coreFunc.logData("InsuranceOfferTest","","Failed","Error: Refer output logs for more information.",assertEnabled);
-			e.printStackTrace();
-			TestResult.appendTestResult();
+			e.printStackTrace();			
 		}		
 		
 	}

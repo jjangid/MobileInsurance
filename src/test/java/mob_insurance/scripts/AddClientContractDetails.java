@@ -81,18 +81,16 @@ public class AddClientContractDetails extends TestBase{
 				System.out.println("Test Case ID : "+testData[tcNo][0]);
 				//Verify 'ExecuteTest' column value to identify whether test case need to execute or not
 				if(String.valueOf(testData[tcNo][1]).equalsIgnoreCase("TRUE")){
-//					Open URL and Login will only be called when Login needs to be done					
+				//Open URL and Login will only be called when Login needs to be done					
 					String loginText = (String) testData[tcNo][2];
-					String[] loginVariable = coreFunc.GetLoginRole(loginText);
-					//Open URL and Login will only be called when Login needs to be done					
+					String[] loginVariable = coreFunc.GetLoginRole(loginText);					
 					if(String.valueOf(loginVariable[0].trim()).equalsIgnoreCase("TRUE")){						
 						//Login to application with specified credentials
 						if(!coreFunc.Login(loginVariable[1])){
 							TestResult.appendTestResult();
 							continue;
 						}
-					}
-					
+					}					
 					//Verify 'CreateClient' column value to identify whether client need to create or not
 					if(String.valueOf(testData[tcNo][3]).equalsIgnoreCase("TRUE")){
 						AddClientResult= AddClient(testData[tcNo]);						
@@ -102,7 +100,7 @@ public class AddClientContractDetails extends TestBase{
 						Reporter.log("Client creation skipped for test case "+testData[tcNo][0]+".");
 						System.out.println("Client creation skipped for test case "+testData[tcNo][0]+".");
 					}
-					
+										
 					//Verify 'FamilyDetails' column value to identify whether client need to create or not
 					if(String.valueOf(testData[tcNo][41]).equalsIgnoreCase("TRUE")){
 						AddClientRelativesResult= AddClientRelatives(testData[tcNo]);						
@@ -167,20 +165,20 @@ public class AddClientContractDetails extends TestBase{
 							AddClientProfessionResult && AddClientJobResult && AddClientRiskResult  && AddClientBankResult)
 					{
 						coreFunc.logData("CreateClientAndContract",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
+						TestResult.addTestResult("CreateClientAndContract Test Case : "+String.valueOf(testData[tcNo][0]),"Passed");
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
 					}
 					
-					boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[tcNo][98]));
+					boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[tcNo][95]));
 					if(needToLogOut){
 					  coreFunc.Logout();					  
 					}
-					TestResult.appendTestResult();
-					//getDriver().navigate().refresh();
+					getDriver().navigate().refresh();
 					waitForLoad();
 				}
 				else
 				{
-					
+					TestResult.addTestResult("Test Case : "+String.valueOf(testData[tcNo][0]),"Skipped");
 					Reporter.log("Test execution of test case "+testData[tcNo][0]+" is skipped");
 					System.out.println("Test execution of test case "+testData[tcNo][0]+" is skipped");
 					
@@ -188,12 +186,12 @@ public class AddClientContractDetails extends TestBase{
 			    Reporter.log("Test execution completed for testID: "+testData[tcNo][0]);
 			    Reporter.log("*******************************************************************************************");
 			    TestResult.appendTestResult();
-			}
-			
-			
+			}			
 		}
 		catch(Exception e){
 			//new SkipException("Auto UUID ID is Missing."); 
+			TestResult.addTestResult("CreateClientAndContract failed due to error occured","Failed");
+			TestResult.appendTestResult();
 			Reporter.log("Error: Test Case failed due to error occured");
 			coreFunc.logData("CreateClientAndContract","","Failed","Error: Refer output logs for more information.",assertEnabled);
 			e.printStackTrace();
@@ -238,7 +236,7 @@ public class AddClientContractDetails extends TestBase{
 			
 			//Enter client data
 			//select value in salutation dropdown
-			List<WebElement> salutationelement = getDriver().findElements(By.xpath(LoadProperty.getVar("salutation", "element")));
+			List<WebElement> salutationelement  = coreFunc.findElements("xpath",LoadProperty.getVar("salutation", "element"));
 			for (int i = 0; i <salutationelement.size() ; i++) {
 		        WebElement sitem = salutationelement.get(i);
 		        if(sitem.isDisplayed()){
@@ -250,117 +248,123 @@ public class AddClientContractDetails extends TestBase{
 			TestResult.addTestResult("Value '"+salutation+"' selected in salutation dropdown" ,"Passed");
 			Reporter.log("Value '"+salutation+"' selected in salutation dropdown  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("title", "element"))).sendKeys(title);
+			WebElement titleTb = coreFunc.findElement("name",LoadProperty.getVar("title", "element"));
+			titleTb.sendKeys(title);
 			TestResult.addTestResult("Value '"+title+"' selected in 'Title' dropdown" ,"Passed");
 			Reporter.log("Value '"+title+"' selected in 'Title' dropdown  ==>  Step Pass");
 			
-			getDriver().findElement(By.id(LoadProperty.getVar("firstName", "element"))).clear();
-			getDriver().findElement(By.id(LoadProperty.getVar("firstName", "element"))).sendKeys(namefirst);
+			WebElement firstName = coreFunc.findElement("id",LoadProperty.getVar("firstName", "element"));
+			firstName.clear();
+			firstName.sendKeys(namefirst);
 			TestResult.addTestResult("Entered value '"+namefirst+"' in 'First Name' field" ,"Passed");
 			Reporter.log("Entered value '"+namefirst+"' in 'First Name' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.id(LoadProperty.getVar("lastName", "element"))).clear();
-			getDriver().findElement(By.id(LoadProperty.getVar("lastName", "element"))).sendKeys(namelast);
-			TestResult.addTestResult("Entered value '"+namefirst+"' in 'LastName' field" ,"Passed");
-			Reporter.log("Entered value '"+namefirst+"' in 'LastName' field  ==>  Step Pass");
+			WebElement lastName = coreFunc.findElement("id",LoadProperty.getVar("lastName", "element"));
+			lastName.clear();
+			lastName.sendKeys(namelast);
+			TestResult.addTestResult("Entered value '"+namelast+"' in 'LastName' field" ,"Passed");
+			Reporter.log("Entered value '"+namelast+"' in 'LastName' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.id(LoadProperty.getVar("dob", "element"))).clear();
-			getDriver().findElement(By.id(LoadProperty.getVar("dob", "element"))).sendKeys(dob);
+			WebElement dob_dd = coreFunc.findElement("id",LoadProperty.getVar("dob", "element"));
+			dob_dd.clear();
+			dob_dd.sendKeys(dob);
 			TestResult.addTestResult("Entered value '"+dob+"' in 'BirthDate' field" ,"Passed");
 			Reporter.log("Entered value '"+dob+"' in 'BirthDate' field  ==>  Step Pass");
 			
 			WebDriverWait wait = new WebDriverWait(getDriver(), 30);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("birthName", "element"))));
-			getDriver().findElement(By.name(LoadProperty.getVar("birthName", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("birthName", "element"))).sendKeys(birthname);
+			WebElement birthNameTb = coreFunc.findElement("name",LoadProperty.getVar("birthName", "element"));
+			birthNameTb.clear();
+			birthNameTb.sendKeys(birthname);
 			TestResult.addTestResult("Entered value '"+birthname+"' in 'Birth Name' field" ,"Passed");
 			Reporter.log("Entered value '"+birthname+"' in 'Birth Name' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("birthPlace", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("birthPlace", "element"))).sendKeys(birthplace);
+			WebElement birthPlaceTb = coreFunc.findElement("name",LoadProperty.getVar("birthPlace", "element"));
+			birthPlaceTb.clear();
+			birthPlaceTb.sendKeys(birthplace);
 			TestResult.addTestResult("Entered value '"+birthplace+"' in 'BirthPlace' field" ,"Passed");
 			Reporter.log("Entered value '"+birthplace+"' in 'BirthPlace' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("street", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("street", "element"))).sendKeys(streetName);
+			WebElement street = coreFunc.findElement("name",LoadProperty.getVar("street", "element"));
+			street.clear();
+			street.sendKeys(streetName);
 			TestResult.addTestResult("Entered value '"+streetName+"' in 'StreetName' field" ,"Passed");
 			Reporter.log("Entered value '"+streetName+"' in 'StreetName' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("streetNum", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("streetNum", "element"))).sendKeys(streetNum);
+			WebElement streetNumTb = coreFunc.findElement("name",LoadProperty.getVar("streetNum", "element"));
+			streetNumTb.clear();
+			streetNumTb.sendKeys(streetNum);
 			TestResult.addTestResult("Entered value '"+streetNum+"' in 'Street/No' field" ,"Passed");
 			Reporter.log("Entered value '"+streetNum+"' in 'Street/No' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("zip", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("zip", "element"))).sendKeys(zip);
+			WebElement ziptb = coreFunc.findElement("name",LoadProperty.getVar("zip", "element"));
+			ziptb.clear();
+			ziptb.sendKeys(zip);
 			TestResult.addTestResult("Entered value '"+zip+"' in 'PLZ' field" ,"Passed");
 			Reporter.log("Entered value '"+zip+"' in 'PLZ' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("city", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("city", "element"))).sendKeys(city);
+			WebElement cityTb = coreFunc.findElement("name",LoadProperty.getVar("city", "element"));
+			cityTb.clear();
+			cityTb.sendKeys(city);
 			TestResult.addTestResult("Entered value '"+city+"' in 'City' field" ,"Passed");
 			Reporter.log("Entered value '"+city+"' in 'City' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("phone", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("phone", "element"))).sendKeys(phone);
+			WebElement phoneTb = coreFunc.findElement("name",LoadProperty.getVar("phone", "element"));
+			phoneTb.clear();
+			phoneTb.sendKeys(phone);
 			TestResult.addTestResult("Entered value '"+phone+"' in 'TelePhone' field" ,"Passed");
 			Reporter.log("Entered value '"+phone+"' in 'TelePhone' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("email", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("email", "element"))).sendKeys(email);
+			WebElement emailTb = coreFunc.findElement("name",LoadProperty.getVar("email", "element"));
+			emailTb.clear();
+			emailTb.sendKeys(email);
 			TestResult.addTestResult("Entered value '"+email+"' in 'Email' field" ,"Passed");
 			Reporter.log("Entered value '"+email+"' in 'Email' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("mobile", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("mobile", "element"))).sendKeys(mobile);
+			WebElement mobileTb = coreFunc.findElement("name",LoadProperty.getVar("mobile", "element"));
+			mobileTb.clear();
+			mobileTb.sendKeys(mobile);
 			TestResult.addTestResult("Entered value '"+mobile+"' in 'Mobile' field" ,"Passed");
 			Reporter.log("Entered value '"+mobile+"' in 'Mobile' field  ==>  Step Pass");
-			
-			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-			
+						
 			//Click on save client button
 			coreFunc.ClickOnActionButton("Save");
 			TestResult.addTestResult("Clicked on 'Save' client button" ,"Passed");
 			Reporter.log("Clicked on 'Save' client button  ==>  Step Pass");
 						
-			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-			Thread.sleep(6000);
-			//getDriver().findElement(By.id(LoadProperty.getVar("okPopup", "element"))).click();
+			coreFunc.waitForWhile(5);
+
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 			//System.out.println("Debug log : After client saved");
 			Reporter.log("Search client by Email Id :  "+email);
-			Thread.sleep(5000);
-			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).sendKeys(email);
+			coreFunc.waitForWhile(5);
+			WebElement clientSearchBox = coreFunc.findElement("name",LoadProperty.getVar("clientSearchBox", "element"));
+			clientSearchBox.clear();
+			clientSearchBox.sendKeys(email);
 			TestResult.addTestResult("Entered value '"+email+"' in 'Client Search' field" ,"Passed");
 			Reporter.log("Entered value '"+email+"' in 'Client Search' field  ==>  Step Pass");
 			
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(5);
 			//select first record
-			getDriver().findElement(By.xpath(LoadProperty.getVar("firstRecord", "element"))).click();
-		
+			WebElement firstRecord = coreFunc.findElement("xpath",LoadProperty.getVar("firstRecord", "element"));
+			firstRecord.click();			
+					
 			//Verify client found or not with specified name in grid
-			WebElement recordcount =  getDriver().findElement(By.xpath(LoadProperty.getVar("recordCount", "element")));
-			System.out.println("Debug log : Case verify text :  "+ recordcount.getText());
-			System.out.println("Debug log : Case verify text :2  "+ coreFunc.GetDELanguageText("No data to display"));
+			WebElement recordcount = coreFunc.findElement("xpath",LoadProperty.getVar("recordCount", "element"));
 			if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
 				TestResult.addTestResult("Client not Created with Email ID '"+email ,"Failed");
 				coreFunc.logData("CreateClientAndContract",testID,"Failed","Error: No Client created with Email ID : "+email+"  [ TCID: "+testID+"]",assertEnabled);	    		
 	    		return false;
 			}
 			
-			Thread.sleep(3000);
-			WebDriverWait clientGridWait = new WebDriverWait(getDriver(), 45);
-			
+			coreFunc.waitForWhile(3);
+			WebDriverWait clientGridWait = new WebDriverWait(getDriver(), 45);			
 			clientGridWait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("email", "element"))));
-			
 			List <WebElement> emailExists = getDriver().findElements(By.xpath("//li[@data-email='"+email+"']"));
-			
 			System.out.println("Email created  : "+emailExists.size());
 			for (int j = 0; j <emailExists.size() ; j++) {
 		        WebElement item = emailExists.get(j);
-		        System.out.println("Debug log Size2==>"+item.getText());
 		        if (item.getText().contains(email)) {
 		        	TestResult.addTestResult("Client Created with Email ID '"+email ,"Passed");
 					Reporter.log("Client Created with Email ID '"+email+"' ==>  Step Pass");
@@ -398,10 +402,13 @@ public class AddClientContractDetails extends TestBase{
     private boolean AddClientRelatives(Object[] testData)
    	{
        	System.out.println("Debug log : Entering in CreateClientDetails ");
-        String testID=String.valueOf(testData[0]);
+        
+       	String testID=String.valueOf(testData[0]);
        	try
-   		{
-    		String fd_relation =String.valueOf(testData[42]);
+   		{	
+       		coreFunc.waitForWhile(3);
+       		
+       		String fd_relation =String.valueOf(testData[42]);
     		String fd_salutation =String.valueOf(testData[43]);
     		String fd_title =String.valueOf(testData[44]);
     		String fd_firstname =String.valueOf(testData[45]);
@@ -413,9 +420,10 @@ public class AddClientContractDetails extends TestBase{
     		WebDriverWait clientWait = new WebDriverWait(getDriver(), 45);
     		clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
     		//Enter client family data
-
+    		System.out.println("Debug log : Entering in CreateClientDetails 1");
     		//click on relatives tab
-    		getDriver().findElement(By.linkText(LoadProperty.getVar("relatives", "element"))).click();
+    		WebElement eleProviderName=coreFunc.findElement("linkText",LoadProperty.getVar("relatives", "element"));
+			eleProviderName.click();
     		TestResult.addTestResult("Clicked on 'Relative' Tab" ,"Passed");
 			Reporter.log("Clicked on 'Relative' Tab  ==>  Step Pass");
     		
@@ -426,14 +434,14 @@ public class AddClientContractDetails extends TestBase{
 			
     		//select value in relation dropdown
     		WebElement relationDD =  getDriver().findElement(By.cssSelector(LoadProperty.getVar("relationsDD", "element")));
-    		relationDD.click();  
+			relationDD.click();  
     		coreFunc.SelectValueInDropdown(fd_relation);
 			TestResult.addTestResult("Value '"+fd_relation+"' selected in 'Relation' dropdown" ,"Passed");
 			Reporter.log("Value '"+fd_relation+"' selected in 'Relation' dropdown  ==>  Step Pass");
 
-    		    		
     		//select value in salutation dropdown
-			List<WebElement> salutationelement = getDriver().findElements(By.xpath(LoadProperty.getVar("salutationDD", "element")));
+			List<WebElement> salutationelement = coreFunc.findElements("xpath",LoadProperty.getVar("salutationDD", "element"));
+			coreFunc.waitForWhile(2);
 			for (int i = 0; i <salutationelement.size() ; i++) {
 		        WebElement sitem = salutationelement.get(i);
 		        if(sitem.isDisplayed()){
@@ -446,7 +454,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Value '"+fd_salutation+"' selected in 'Salutation' dropdown  ==>  Step Pass");
 			
 			//select value in title dropdown
-			List<WebElement> titleelement = getDriver().findElements(By.xpath(LoadProperty.getVar("titleElement", "element")));
+			List<WebElement> titleelement =coreFunc.findElements("xpath",LoadProperty.getVar("titleElement", "element")); 
 			for (int i = 0; i <titleelement.size() ; i++) {
 		        WebElement titem = titleelement.get(i);
 		        if(titem.isDisplayed()){		        	
@@ -458,7 +466,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Value '"+fd_title+"' selected in 'Title' dropdown  ==>  Step Pass");			
 					
 			//Enter value in First name text box
-			List<WebElement> firstname = getDriver().findElements(By.xpath(LoadProperty.getVar("first_Name", "element")));
+			List<WebElement> firstname =coreFunc.findElements("xpath",LoadProperty.getVar("first_Name", "element")); 
 			for (int i = 0; i <firstname.size() ; i++) {
 		        WebElement fnitem = firstname.get(i);
 		        if(fnitem.isDisplayed()){
@@ -470,7 +478,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Entered value '"+fd_firstname+"' in 'First Name' field  ==>  Step Pass");
 			
 			//Enter value in Last name text box
-			List<WebElement> lastname = getDriver().findElements(By.xpath(LoadProperty.getVar("last_Name", "element")));
+			List<WebElement> lastname = coreFunc.findElements("xpath",LoadProperty.getVar("last_Name", "element"));
 			for (int i = 0; i <lastname.size() ; i++) {
 		        WebElement lnitem = lastname.get(i);
 		        if(lnitem.isDisplayed()){
@@ -483,7 +491,7 @@ public class AddClientContractDetails extends TestBase{
 			
 			
 			//Enter value in DOB  box
-			List<WebElement> dob = getDriver().findElements(By.xpath(LoadProperty.getVar("birth_Date", "element")));
+			List<WebElement> dob = coreFunc.findElements("xpath",LoadProperty.getVar("birth_Date", "element"));
 			for (int i = 0; i <dob.size() ; i++) {
 		        WebElement ditem = dob.get(i);
 		        if(ditem.isDisplayed()){
@@ -495,7 +503,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Entered value '"+fd_dob+"' in 'DOB' field  ==>  Step Pass");
 			
 			//Enter value in communication data text box
-			List<WebElement> woc = getDriver().findElements(By.xpath(LoadProperty.getVar("communication", "element")));
+			List<WebElement> woc = coreFunc.findElements("xpath",LoadProperty.getVar("communication", "element")); 
 			for (int i = 0; i <woc.size() ; i++) {
 		        WebElement witem = woc.get(i);
 		        if(witem.isDisplayed()){
@@ -508,7 +516,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Entered value '"+fd_woc+"' in 'Way Of Communication' field  ==>  Step Pass");
 			
 			//Enter value in communication data text box
-			List<WebElement> comdata = getDriver().findElements(By.xpath(LoadProperty.getVar("communicationData", "element")));
+			List<WebElement> comdata = coreFunc.findElements("xpath",LoadProperty.getVar("communicationData", "element")); 
 			for (int i = 0; i <comdata.size() ; i++) {
 		        WebElement cditem = comdata.get(i);
 		        if(cditem.isDisplayed()){
@@ -519,8 +527,7 @@ public class AddClientContractDetails extends TestBase{
 			TestResult.addTestResult("Entered value '"+fd_woc+"' in 'Communication Data' field" ,"Passed");
 			Reporter.log("Entered value '"+fd_woc+"' in 'Communication Data' field  ==>  Step Pass");
 			
-			List<WebElement> savebtn = getDriver().findElements(By.xpath(LoadProperty.getVar("saveBtnRelative", "element")));
-			System.out.println("Debug log Size==>"+savebtn.size());
+			List<WebElement> savebtn = coreFunc.findElements("xpath",LoadProperty.getVar("saveBtnRelative", "element")); 
 			for (int i = 0; i <=savebtn.size() ; i++) {
 		        WebElement item = savebtn.get(i);
 		        if (item.getText().equals(coreFunc.GetDELanguageText("Save"))) {
@@ -529,7 +536,7 @@ public class AddClientContractDetails extends TestBase{
 		        }
 		    }
 			System.out.println("Debug log : Exiting from CreateClientDetails ");
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(2);
    		}
 		catch(NoSuchElementException eNFound)
 		{
@@ -577,8 +584,9 @@ public class AddClientContractDetails extends TestBase{
     		//Enter client profession data
 
     		//click on Profession tab
-    		getDriver().findElement(By.linkText(LoadProperty.getVar("professionTab", "element"))).click();
-			TestResult.addTestResult("Clicked on 'Profession' Tab" ,"Passed");
+    		WebElement professionTab = coreFunc.findElement("linkText",LoadProperty.getVar("professionTab", "element"));
+    		professionTab.click();
+    		TestResult.addTestResult("Clicked on 'Profession' Tab" ,"Passed");
 			Reporter.log("Clicked on 'Profession' Tab  ==>  Step Pass");
 			
     		//click on Edit button
@@ -589,84 +597,96 @@ public class AddClientContractDetails extends TestBase{
     		WebDriverWait clientWait = new WebDriverWait(getDriver(), 45);
     		clientWait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("profession", "element"))));
     		
-    		
-			getDriver().findElement(By.name(LoadProperty.getVar("profession", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("profession", "element"))).sendKeys(pd_profession);
+    		WebElement profession = coreFunc.findElement("name",LoadProperty.getVar("profession", "element"));
+    		profession.clear();
+    		profession.sendKeys(pd_profession);
 			TestResult.addTestResult("Entered value '"+pd_profession+"' in 'Profession' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_profession+"' in 'Profession' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.id(LoadProperty.getVar("jobType", "element"))).click();
-			coreFunc.SelectValueInDropdown(pd_jobtype);
+			WebElement jobType = coreFunc.findElement("id",LoadProperty.getVar("jobType", "element"));
+			jobType.click();
+    		coreFunc.SelectValueInDropdown(pd_jobtype);
 			TestResult.addTestResult("Value '"+pd_jobtype+"' selected in 'Job Type' dropdown" ,"Passed");
 			Reporter.log("Value '"+pd_jobtype+"' selected in 'Job Type' dropdown  ==>  Step Pass");
 						
-			getDriver().findElement(By.name(LoadProperty.getVar("workPercentagePhysical", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("workPercentagePhysical", "element"))).sendKeys(pd_physicalperc);
+			WebElement workPercentagePhysical = coreFunc.findElement("name",LoadProperty.getVar("workPercentagePhysical", "element"));
+			workPercentagePhysical.clear();
+			workPercentagePhysical.sendKeys(pd_physicalperc);    		
 			TestResult.addTestResult("Entered value '"+pd_physicalperc+"' in 'Physical %' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_physicalperc+"' in 'Physical %' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlyBurutto", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlyBurutto", "element"))).sendKeys(pd_yearBru);
+			WebElement incomeYearlyBurutto = coreFunc.findElement("name",LoadProperty.getVar("incomeYearlyBurutto", "element"));
+			incomeYearlyBurutto.clear();
+			incomeYearlyBurutto.sendKeys(pd_yearBru);    	
 			TestResult.addTestResult("Entered value '"+pd_yearBru+"' in 'Yearly Brutto' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_yearBru+"' in 'Yearly Brutto' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlyNetto", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlyNetto", "element"))).sendKeys(pd_yerlynetto);
+			WebElement incomeYearlyNetto = coreFunc.findElement("name",LoadProperty.getVar("incomeYearlyNetto", "element"));
+			incomeYearlyNetto.clear();
+			incomeYearlyNetto.sendKeys(pd_yerlynetto);  			
 			TestResult.addTestResult("Entered value '"+pd_yerlynetto+"' in 'Yearly Netto' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_yerlynetto+"' in 'Yearly Netto' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlySalaries", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("incomeYearlySalaries", "element"))).sendKeys(pd_yearlysal);
+			WebElement incomeYearlySalaries = coreFunc.findElement("name",LoadProperty.getVar("incomeYearlySalaries", "element"));
+			incomeYearlySalaries.clear();
+			incomeYearlySalaries.sendKeys(pd_yearlysal); 
 			TestResult.addTestResult("Entered value '"+pd_yearlysal+"' in 'Yearly Salaries' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_yearlysal+"' in 'Yearly Salaries' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("retirementSavingSince", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("retirementSavingSince", "element"))).sendKeys(pd_savingSince);			
+			WebElement retirementSavingSince = coreFunc.findElement("name",LoadProperty.getVar("retirementSavingSince", "element"));
+			retirementSavingSince.clear();
+			retirementSavingSince.sendKeys(pd_savingSince); 
 			TestResult.addTestResult("Entered value '"+pd_savingSince+"' in 'Saving Since' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_savingSince+"' in 'Saving Since' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("capitalFormingPayments", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("capitalFormingPayments", "element"))).sendKeys(pd_capfrom);
+			WebElement capitalFormingPayments = coreFunc.findElement("name",LoadProperty.getVar("capitalFormingPayments", "element"));
+			capitalFormingPayments.clear();
+			capitalFormingPayments.sendKeys(pd_capfrom); 
 			TestResult.addTestResult("Entered value '"+pd_capfrom+"' in 'Capital Forming Payments' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_capfrom+"' in 'Capital Forming Payments' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("taxOfficeName", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("taxOfficeName", "element"))).sendKeys(pd_taxoffice);
+			WebElement taxOfficeName = coreFunc.findElement("name",LoadProperty.getVar("taxOfficeName", "element"));
+			taxOfficeName.clear();
+			taxOfficeName.sendKeys(pd_taxoffice); 
 			TestResult.addTestResult("Entered value '"+pd_taxoffice+"' in 'Tax Office' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_taxoffice+"' in 'Tax Office' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("taxNumber", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("taxNumber", "element"))).sendKeys(pd_taxnum);
+			WebElement taxNumber = coreFunc.findElement("name",LoadProperty.getVar("taxNumber", "element"));
+			taxNumber.clear();
+			taxNumber.sendKeys(pd_taxnum); 
 			TestResult.addTestResult("Entered value '"+pd_taxnum+"' in 'Tax Number' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_taxnum+"' in 'Tax Number' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("taxId", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("taxId", "element"))).sendKeys(pd_taxid);
+			WebElement taxId = coreFunc.findElement("name",LoadProperty.getVar("taxId", "element"));
+			taxId.clear();
+			taxId.sendKeys(pd_taxid); 
 			TestResult.addTestResult("Entered value '"+pd_taxid+"' in 'Tax Id' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_taxid+"' in 'Tax Id' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("taxClass", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("taxClass", "element"))).sendKeys(pd_taxclass);
+			WebElement taxClass = coreFunc.findElement("name",LoadProperty.getVar("taxClass", "element"));
+			taxClass.clear();
+			taxClass.sendKeys(pd_taxclass); 
 			TestResult.addTestResult("Entered value '"+pd_taxclass+"' in 'Tax Class' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_taxclass+"' in 'Tax Class' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("churchTaxPercentage", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("churchTaxPercentage", "element"))).sendKeys(pd_churchtax);
+			WebElement churchTaxPercentage = coreFunc.findElement("name",LoadProperty.getVar("churchTaxPercentage", "element"));
+			churchTaxPercentage.clear();
+			churchTaxPercentage.sendKeys(pd_churchtax); 
 			TestResult.addTestResult("Entered value '"+pd_churchtax+"' in 'Church Tax Percentage' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_churchtax+"' in 'Church Tax Percentage' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("socialInsuranceNumber", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("socialInsuranceNumber", "element"))).sendKeys(pd_sinsnumber);
+			WebElement socialInsuranceNumber = coreFunc.findElement("name",LoadProperty.getVar("socialInsuranceNumber", "element"));
+			socialInsuranceNumber.clear();
+			socialInsuranceNumber.sendKeys(pd_sinsnumber);
 			TestResult.addTestResult("Entered value '"+pd_sinsnumber+"' in 'Social Insurance Number' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_sinsnumber+"' in 'Social Insurance Number' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("healthInsurance", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("healthInsurance", "element"))).sendKeys(pd_healthInsu);
+			WebElement healthInsurance = coreFunc.findElement("name",LoadProperty.getVar("healthInsurance", "element"));
+			healthInsurance.clear();
+			healthInsurance.sendKeys(pd_healthInsu);
 			TestResult.addTestResult("Entered value '"+pd_healthInsu+"' in 'Health Insurance' field" ,"Passed");
 			Reporter.log("Entered value '"+pd_healthInsu+"' in 'Health Insurance' field  ==>  Step Pass");
 			
-			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-					
 			//click on Save button
     		coreFunc.ClickOnActionButton("Save");
     		TestResult.addTestResult("Clicked on 'Save' button" ,"Passed");
@@ -674,7 +694,7 @@ public class AddClientContractDetails extends TestBase{
     		clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 		  
 			System.out.println("Debug log : Exiting from AddClientProfession ");
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(2);
    		}
 		catch(NoSuchElementException eNFound)
 		{
@@ -708,13 +728,13 @@ public class AddClientContractDetails extends TestBase{
     		String jd_street =String.valueOf(testData[70]);
     		String jd_number =String.valueOf(testData[71]);
     		String jd_zip =String.valueOf(testData[72]);
-    		String jd_city =String.valueOf(testData[73]);
-    		String jd_country =String.valueOf(testData[74]);
+    		//String jd_city =String.valueOf(testData[73]);
+    		//String jd_country =String.valueOf(testData[74]);
     		
-    		//Enter client Job data
-			
+    		//Enter client Job data			
 			//click on Job tab
-			getDriver().findElement(By.linkText(LoadProperty.getVar("jobTab", "element"))).click();
+    		WebElement jobTab = coreFunc.findElement("linkText",LoadProperty.getVar("jobTab", "element"));
+    		jobTab.click();
 			TestResult.addTestResult("Clicked on 'Job' Tab" ,"Passed");
 			Reporter.log("Clicked on 'Job' Tab  ==>  Step Pass");
 			//click on Edit button
@@ -725,55 +745,58 @@ public class AddClientContractDetails extends TestBase{
 			WebDriverWait clientWait = new WebDriverWait(getDriver(), 45);
 			clientWait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("employerName", "element"))));
 						
-			getDriver().findElement(By.name(LoadProperty.getVar("employerName", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("employerName", "element"))).sendKeys(jd_employer);
+			WebElement employerName = coreFunc.findElement("name",LoadProperty.getVar("employerName", "element"));
+			employerName.clear();
+			employerName.sendKeys(jd_employer);
 			TestResult.addTestResult("Entered value '"+jd_employer+"' in 'Employer' field" ,"Passed");
 			Reporter.log("Entered value '"+jd_employer+"' in 'Employer' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("employerContact", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("employerContact", "element"))).sendKeys(jd_contact);	
+			WebElement employerContact = coreFunc.findElement("name",LoadProperty.getVar("employerContact", "element"));
+			employerContact.clear();
+			employerContact.sendKeys(jd_contact);
 			TestResult.addTestResult("Entered value '"+jd_contact+"' in 'Contact' field" ,"Passed");
 			Reporter.log("Entered value '"+jd_contact+"' in 'Contact' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("employerStreet", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("employerStreet", "element"))).sendKeys(jd_street);
+			WebElement employerStreet = coreFunc.findElement("name",LoadProperty.getVar("employerStreet", "element"));
+			employerStreet.clear();
+			employerStreet.sendKeys(jd_street);
 			TestResult.addTestResult("Entered value '"+jd_street+"' in 'Street' field" ,"Passed");
 			Reporter.log("Entered value '"+jd_street+"' in 'Street' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("employerStreet_num", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("employerStreet_num", "element"))).sendKeys(jd_number);
+			WebElement employerStreet_num = coreFunc.findElement("name",LoadProperty.getVar("employerStreet_num", "element"));
+			employerStreet_num.clear();
+			employerStreet_num.sendKeys(jd_number);
 			TestResult.addTestResult("Entered value '"+jd_number+"' in 'Number' field" ,"Passed");
 			Reporter.log("Entered value '"+jd_number+"' in 'Number' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("employerZip", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("employerZip", "element"))).sendKeys(jd_zip);
+			WebElement employerZip = coreFunc.findElement("name",LoadProperty.getVar("employerZip", "element"));
+			employerZip.clear();
+			employerZip.sendKeys(jd_zip);
 			TestResult.addTestResult("Entered value '"+jd_zip+"' in 'ZIP' field" ,"Passed");
 			Reporter.log("Entered value '"+jd_zip+"' in 'ZIP' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.xpath(LoadProperty.getVar("employerCity", "element"))).click();
-			new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();
-			//Thread.sleep(2000);
-			coreFunc.SelectValueInDropdown(jd_city);
-			TestResult.addTestResult("Value '"+jd_city+"' selected in 'City' dropdown" ,"Passed");
-			Reporter.log("Value '"+jd_city+"' selected in 'City' dropdown  ==>  Step Pass");
+			//WebElement employerCity = coreFunc.findElement("xpath",LoadProperty.getVar("employerCity", "element"));
+			//employerCity.click();
+			//new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();
+			//coreFunc.SelectValueInDropdown(jd_city);
+			//TestResult.addTestResult("Value '"+jd_city+"' selected in 'City' dropdown" ,"Passed");
+			//Reporter.log("Value '"+jd_city+"' selected in 'City' dropdown  ==>  Step Pass");
 			
-			getDriver().findElement(By.xpath(LoadProperty.getVar("employerCountry", "element"))).click();
-			new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();			
-			coreFunc.SelectValueInDropdown(jd_country);
-			TestResult.addTestResult("Value '"+jd_country+"' selected in 'Country' dropdown" ,"Passed");
-			Reporter.log("Value '"+jd_country+"' selected in 'Country' dropdown  ==>  Step Pass");
-					
-			getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-					
+			//WebElement employerCountry = coreFunc.findElement("name",LoadProperty.getVar("employerCountry", "element"));
+			//employerCountry.click();
+			//new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();			
+			//coreFunc.SelectValueInDropdown(jd_country);
+			//TestResult.addTestResult("Value '"+jd_country+"' selected in 'Country' dropdown" ,"Passed");
+			//Reporter.log("Value '"+jd_country+"' selected in 'Country' dropdown  ==>  Step Pass");
+										
 			//click on Save button
 			coreFunc.ClickOnActionButton("Save");			
 			TestResult.addTestResult("Clicked on 'Save' button" ,"Passed");
 			Reporter.log("Clicked on 'Save' button  ==>  Step Pass");
 			
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
-			
 			System.out.println("Debug log : Exiting from AddClientJob ");
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(2);
     	}
 		catch(NoSuchElementException eNFound)
 		{
@@ -808,7 +831,8 @@ public class AddClientContractDetails extends TestBase{
     		String rd_healthinfo =String.valueOf(testData[79]);
 			
 			//click on Risk tab
-			getDriver().findElement(By.linkText(LoadProperty.getVar("riskTab", "element"))).click();
+    		WebElement riskTab = coreFunc.findElement("linkText",LoadProperty.getVar("riskTab", "element"));
+    		riskTab.click();
 			TestResult.addTestResult("Clicked on 'Risk' Tab" ,"Passed");
 			Reporter.log("Clicked on 'Risk' Tab  ==>  Step Pass");
 			
@@ -821,25 +845,28 @@ public class AddClientContractDetails extends TestBase{
 			clientWait.until(ExpectedConditions.visibilityOfElementLocated(By.name(LoadProperty.getVar("weight", "element"))));
     		
     		//Enter client risk data
-			
-			getDriver().findElement(By.name(LoadProperty.getVar("weight", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("weight", "element"))).sendKeys(rd_weight);
+			WebElement weight = coreFunc.findElement("name",LoadProperty.getVar("weight", "element"));
+			weight.clear();
+			weight.sendKeys(rd_weight);
 			TestResult.addTestResult("Entered value '"+rd_weight+"' in 'Weight' field" ,"Passed");
 			Reporter.log("Entered value '"+rd_weight+"' in 'Weight' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("height", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("height", "element"))).sendKeys(rd_height);	
+			WebElement height = coreFunc.findElement("name",LoadProperty.getVar("height", "element"));
+			height.clear();
+			height.sendKeys(rd_height);
 			TestResult.addTestResult("Entered value '"+rd_height+"' in 'Height' field" ,"Passed");
 			Reporter.log("Entered value '"+rd_height+"' in 'Height' field  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("smoker", "element"))).click();
+			WebElement smoker = coreFunc.findElement("name",LoadProperty.getVar("smoker", "element"));
+			smoker.click();
 			new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();			
 			coreFunc.SelectValueInDropdown(rd_smoker);
 			TestResult.addTestResult("Value '"+rd_smoker+"' selected in 'Smoker' dropdown" ,"Passed");
 			Reporter.log("Value '"+rd_smoker+"' selected in 'Smoker' dropdown  ==>  Step Pass");
 			
-			getDriver().findElement(By.name(LoadProperty.getVar("healthInfo", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("healthInfo", "element"))).sendKeys(rd_healthinfo);
+			WebElement healthInfo = coreFunc.findElement("name",LoadProperty.getVar("healthInfo", "element"));
+			healthInfo.clear();
+			healthInfo.sendKeys(rd_healthinfo);
 			TestResult.addTestResult("Entered value '"+rd_healthinfo+"' in 'Health Info' field" ,"Passed");
 			Reporter.log("Entered value '"+rd_healthinfo+"' in 'Health Info' field  ==>  Step Pass");
 			
@@ -849,7 +876,7 @@ public class AddClientContractDetails extends TestBase{
 			Reporter.log("Clicked on 'Save' button  ==>  Step Pass");
 			
     		System.out.println("Debug log : Exiting from AddClientRisk ");
-			Thread.sleep(5000);
+    		coreFunc.waitForWhile(2);
    		}
 		catch(NoSuchElementException eNFound)
 		{
@@ -878,6 +905,7 @@ public class AddClientContractDetails extends TestBase{
         String testID=String.valueOf(testData[0]);
        	try
    		{
+       		
     		String bd_type =String.valueOf(testData[83]);
     		String bd_holdername =String.valueOf(testData[84]);
 			String bd_bankname =String.valueOf(testData[85]);
@@ -888,17 +916,16 @@ public class AddClientContractDetails extends TestBase{
     		String bd_cardName =String.valueOf(testData[90]);
     		String bd_cardNum =String.valueOf(testData[91]);
     		String bd_validUpto =String.valueOf(testData[92]);
-    		
+    		coreFunc.waitForWhile(2);
     		//click on Bank tab
-			getDriver().findElement(By.linkText(LoadProperty.getVar("bankTab", "element"))).click();
+    		WebElement bankTab = coreFunc.findElement("linkText",LoadProperty.getVar("bankTab", "element"));
+    		bankTab.click();
 			TestResult.addTestResult("Clicked on 'Bank' Tab" ,"Passed");
 			Reporter.log("Clicked on 'Bank' Tab  ==>  Step Pass");
 			
-			WebDriverWait clientWait = new WebDriverWait(getDriver(), 45);
-			clientWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LoadProperty.getVar("addBank", "element"))));
-			
-    		//click on add bank details icon    		
-    		getDriver().findElement(By.xpath(LoadProperty.getVar("addBank", "element"))).click();
+			//click on add bank details icon 
+			WebElement addBank = coreFunc.findElement("xpath",LoadProperty.getVar("addBank", "element"));
+			addBank.click();
     		TestResult.addTestResult("Clicked on 'Add Bank Detail' button" ,"Passed");
 			Reporter.log("Clicked on 'Add Bank Detail' Tab  ==>  Step Pass");
 			
@@ -908,62 +935,70 @@ public class AddClientContractDetails extends TestBase{
 			TestResult.addTestResult("Value '"+bd_type+"' selected in 'Type' dropdown" ,"Passed");
 			Reporter.log("Value '"+bd_type+"' selected in 'Type' dropdown  ==>  Step Pass");
 			
-    		getDriver().findElement(By.name(LoadProperty.getVar("holderName", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("holderName", "element"))).sendKeys(bd_holdername);
-			TestResult.addTestResult("Entered value '"+bd_holdername+"' in 'Holder Name' field" ,"Passed");
+			WebElement holderName = coreFunc.findElement("name",LoadProperty.getVar("holderName", "element"));
+			holderName.clear();
+			holderName.sendKeys(bd_holdername);
+    		TestResult.addTestResult("Entered value '"+bd_holdername+"' in 'Holder Name' field" ,"Passed");
 			Reporter.log("Entered value '"+bd_holdername+"' in 'Holder Name' field  ==>  Step Pass");
 			
 			if(bd_type.equals(coreFunc.GetDELanguageText("Account")))
 			{
-				getDriver().findElement(By.xpath(LoadProperty.getVar("bankName", "element"))).click();  
+				WebElement bankName = coreFunc.findElement("xpath",LoadProperty.getVar("bankName", "element"));
+				bankName.click();				
+				//getDriver().findElement(By.xpath(LoadProperty.getVar("bankName", "element"))).click();  
 				new Actions(getDriver()).sendKeys(Keys.ARROW_DOWN).perform();
 				coreFunc.SelectValueInDropdown(bd_bankname);
 				TestResult.addTestResult("Value '"+bd_bankname+"' selected in 'Bank Name' dropdown" ,"Passed");
 				Reporter.log("Value '"+bd_bankname+"' selected in 'Bank Name' dropdown  ==>  Step Pass");
 				
-				getDriver().findElement(By.name(LoadProperty.getVar("bankNumber", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("bankNumber", "element"))).sendKeys(bd_banknumber);	
+				WebElement bankNumber = coreFunc.findElement("name",LoadProperty.getVar("bankNumber", "element"));
+				bankNumber.clear();
+				bankNumber.sendKeys(bd_banknumber);
 				TestResult.addTestResult("Entered value '"+bd_banknumber+"' in 'Bank Number' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_banknumber+"' in 'Bank Number' field  ==>  Step Pass");	
 				
-				getDriver().findElement(By.name(LoadProperty.getVar("accountNo", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("accountNo", "element"))).sendKeys(bd_accountnum);
+				WebElement accountNo = coreFunc.findElement("name",LoadProperty.getVar("accountNo", "element"));
+				accountNo.clear();
+				accountNo.sendKeys(bd_accountnum);
 				TestResult.addTestResult("Entered value '"+bd_accountnum+"' in 'Account No' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_accountnum+"' in 'Account No' field  ==>  Step Pass");
 			
-				getDriver().findElement(By.name(LoadProperty.getVar("iban", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("iban", "element"))).sendKeys(bd_iban);
+				WebElement iban = coreFunc.findElement("name",LoadProperty.getVar("iban", "element"));
+				iban.clear();
+				iban.sendKeys(bd_iban);
 				TestResult.addTestResult("Entered value '"+bd_iban+"' in 'IBAN' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_iban+"' in 'IBAN' field  ==>  Step Pass");
 				
-				getDriver().findElement(By.name(LoadProperty.getVar("bic", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("bic", "element"))).sendKeys(bd_bic);
+				WebElement bic = coreFunc.findElement("name",LoadProperty.getVar("bic", "element"));
+				bic.clear();
+				bic.sendKeys(bd_bic);
 				TestResult.addTestResult("Entered value '"+bd_bic+"' in 'BIC' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_bic+"' in 'BIC' field  ==>  Step Pass");
 			}
 			else
 			{
-				getDriver().findElement(By.name(LoadProperty.getVar("cardName", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("cardName", "element"))).sendKeys(bd_cardName);
+				WebElement cardName = coreFunc.findElement("name",LoadProperty.getVar("cardName", "element"));
+				cardName.clear();
+				cardName.sendKeys(bd_cardName);
 				TestResult.addTestResult("Entered value '"+bd_cardName+"' in 'Card Name' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_cardName+"' in 'Card Name' field  ==>  Step Pass");
 				
-				getDriver().findElement(By.name(LoadProperty.getVar("cardNumber", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("cardNumber", "element"))).sendKeys(bd_cardNum);
+				WebElement cardNumber = coreFunc.findElement("name",LoadProperty.getVar("cardNumber", "element"));
+				cardNumber.clear();
+				cardNumber.sendKeys(bd_cardNum);
 				TestResult.addTestResult("Entered value '"+bd_cardNum+"' in 'Card Number' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_cardNum+"' in 'Card Number' field  ==>  Step Pass");
 				
-				getDriver().findElement(By.name(LoadProperty.getVar("validTo", "element"))).clear();
-				getDriver().findElement(By.name(LoadProperty.getVar("validTo", "element"))).sendKeys(bd_validUpto);
+				WebElement validTo = coreFunc.findElement("name",LoadProperty.getVar("validTo", "element"));
+				validTo.clear();
+				validTo.sendKeys(bd_validUpto);
 				TestResult.addTestResult("Entered value '"+bd_validUpto+"' in 'Valid To' field" ,"Passed");
 				Reporter.log("Entered value '"+bd_validUpto+"' in 'Valid To' field  ==>  Step Pass");
 			}	
 			//click on Save button
-			List<WebElement> savebtn = getDriver().findElements(By.xpath(LoadProperty.getVar("saveBtnRelative", "element")));
-			System.out.println("Debug log Size==>"+savebtn.size());
+			List<WebElement> savebtn = coreFunc.findElements("xpath",LoadProperty.getVar("saveBtnRelative", "element"));
 			for (int i = 0; i <=savebtn.size() ; i++) {
 		        WebElement item = savebtn.get(i);
-		        System.out.println("Debug log Size2==>"+item.getText());
 		        if (item.getText().equals(coreFunc.GetDELanguageText("Save"))) {
 		            item.click();
 		            break;
@@ -973,7 +1008,7 @@ public class AddClientContractDetails extends TestBase{
 			TestResult.addTestResult("Clicked on 'Save' button" ,"Passed");
 			Reporter.log("Clicked on 'Save' button  ==>  Step Pass");
 			System.out.println("Debug log : Exiting from AddClientBank");
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(5);//Thread.sleep(5000);
    		}
 		catch(NoSuchElementException eNFound)
 		{
@@ -995,14 +1030,14 @@ public class AddClientContractDetails extends TestBase{
     	}
     	return true;
    	}
-			
-    private boolean AddContract(Object[] testData)
+		    
+	private boolean AddContract(Object[] testData)
 	{
     	System.out.println("Debug log : Entering in AddContract ");
     	String testStep="";
     	String testID=String.valueOf(testData[0]);
     	try
-		{
+		{			
     		String namefirst =String.valueOf(testData[7]);
     		String namelast =String.valueOf(testData[8]);
     		String email =String.valueOf(testData[20]);
@@ -1015,21 +1050,21 @@ public class AddClientContractDetails extends TestBase{
     		
     		WebDriverWait clientWait = new WebDriverWait(getDriver(), 45);
     		getDriver().manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-    		Thread.sleep(5000);
+    		coreFunc.waitForWhile(3);
     		clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
     		//Get data for contract   		
     		
     		Reporter.log("Start Create Contract for client First Name :  "+namefirst+" Last Name :  "+namelast+"  Email Id :  "+email);
     		Reporter.log("Search client by Email Id :  "+email);    		
-			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("clientSearchBox", "element"))).sendKeys(email);
+    		WebElement clientSearchBox = coreFunc.findElement("name",LoadProperty.getVar("clientSearchBox", "element"));
+			clientSearchBox.clear();
+			clientSearchBox.sendKeys(email);
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 			
-			coreFunc.waitForWhile(4);
+			coreFunc.waitForWhile(3);
 			//Verify client found or not with specified name in grid 
-			WebElement recordcount =  getDriver().findElement(By.xpath(LoadProperty.getVar("recordCount", "element")));
+			WebElement recordcount =coreFunc.findElement("xpath",LoadProperty.getVar("recordCount", "element")); 
 			System.out.println("Debug log : Client Count :  "+ recordcount.getText());
-			//System.out.println("Debug log : Case verify text :  "+ coreFunc.GetDELanguageText("No data to display"));
 			if(recordcount.getText().equalsIgnoreCase(coreFunc.GetDELanguageText("No data to display"))){
 				Reporter.log("Unable to add contract due to Client not found with details First Name :  "+namefirst+" Last Name :  "+namelast+"  Email Id :  "+email);
 				TestResult.addTestResult("Unable to add contract due to Client not found with details First Name :  "+namefirst+" Last Name :  "+namelast+"  Email Id :  "+email,"Failed");
@@ -1040,17 +1075,17 @@ public class AddClientContractDetails extends TestBase{
 				Reporter.log("Client found with details First Name :  "+namefirst+" Last Name :  "+namelast+"  Email Id :  "+email);
 			}
 			coreFunc.waitForWhile(3);
-			WebElement contractcountB =  getDriver().findElement(By.xpath(LoadProperty.getVar("contractCount", "element")));
+			WebElement contractcountB =coreFunc.findElement("xpath",LoadProperty.getVar("contractCount", "element"));  
 			Reporter.log("Verify existing contract count");
 			System.out.println("Debug log : Contract count before adding :  "+ contractcountB.getText());
 			int contractCountbefore = Integer.parseInt(contractcountB.getText());
-			//System.out.println("Debug log : 1 ");			
-			Thread.sleep(3000);
-			//select first record
-			getDriver().findElement(By.xpath(LoadProperty.getVar("firstRecord", "element"))).click();
-			//System.out.println("Debug log : 2 ");			
 			
-			Thread.sleep(5000);
+			coreFunc.waitForWhile(3);
+			//select first record
+			WebElement firstRecord = coreFunc.findElement("xpath",LoadProperty.getVar("firstRecord", "element"));
+			firstRecord.click();	
+			
+			coreFunc.waitForWhile(3);
 			
     			 testStep="Click Contract Tab.";
 				 String[] locator=ManageLocator.getLocator("Tab.Clients.Contract");
@@ -1058,15 +1093,13 @@ public class AddClientContractDetails extends TestBase{
 				 eleContractTab.click();
 				 TestResult.addTestResult(testStep,"Passed");
 				 
-				 coreFunc.waitForWhile(7);
+				 coreFunc.waitForWhile(5);
 				 testStep="Click Create Contract button.";
-				 locator=ManageLocator.getLocator("Tab.Client.Contract.Button.Create");
-				// WebElement eleCreateButton=coreFunc.findElement(locator[0],locator[1]);
-				 //eleCreateButton.click();
+				 //locator=ManageLocator.getLocator("Tab.Client.Contract.Button.Create");
 				 coreFunc.ClickOnActionButton("Create");
 				 TestResult.addTestResult(testStep,"Passed");
 				 
-				 coreFunc.waitForWhile(10);
+				 coreFunc.waitForWhile(5);
 				 
 				 locator=ManageLocator.getLocator("Create.Contract.Category");
 				 WebElement eleCategory=coreFunc.findElement(locator[0],locator[1]);
@@ -1089,7 +1122,7 @@ public class AddClientContractDetails extends TestBase{
 				 eleCategoryOption.click();	
 				 TestResult.addTestResult(testStep,"Passed");
 				 
-				 coreFunc.waitForWhile(5);
+				 coreFunc.waitForWhile(2);
 				 testStep="Select Provider as "+providerName+" .";
 				 locator=ManageLocator.getLocator("Create.Contract.ProviderName");
 				 WebElement eleProviderName=coreFunc.findElement(locator[0],locator[1]);
@@ -1103,7 +1136,7 @@ public class AddClientContractDetails extends TestBase{
 
 				 TestResult.addTestResult(testStep,"Passed");
 								 
-				 coreFunc.waitForWhile(10);
+				 coreFunc.waitForWhile(4);
 				 testStep="Select Product as "+productName+" .";
 				 locator=ManageLocator.getLocator("Create.Contract.ProductName");
 				 WebElement eleProductName=coreFunc.findElement(locator[0],locator[1]);
@@ -1136,93 +1169,39 @@ public class AddClientContractDetails extends TestBase{
 				 
 				 
 				 testStep="Select Payment as "+payment;
-				 getDriver().findElement(By.name(LoadProperty.getVar("payment", "element"))).clear();
-				 getDriver().findElement(By.name(LoadProperty.getVar("payment", "element"))).sendKeys(payment);
+				 WebElement paymentTB = coreFunc.findElement("name",LoadProperty.getVar("payment", "element"));
+				 paymentTB.clear();
+				 paymentTB.sendKeys(payment);
 				 TestResult.addTestResult(testStep,"Passed");
 				 
 				 testStep="Select Duration Time as "+duration_months;
-				 getDriver().findElement(By.name(LoadProperty.getVar("durationMonths", "element"))).clear();
-				 getDriver().findElement(By.name(LoadProperty.getVar("durationMonths", "element"))).sendKeys(duration_months);
+				 WebElement durationMonthsTB = coreFunc.findElement("name",LoadProperty.getVar("durationMonths", "element"));
+				 durationMonthsTB.clear();
+				 durationMonthsTB.sendKeys(duration_months);
 				 TestResult.addTestResult(testStep,"Passed");
     	
-    		/*
-			//Click on contract tab			
-			getDriver().findElement(By.linkText(LoadProperty.getVar("contractTab", "element"))).click();
-			System.out.println("Debug log : 3 ");			
-			Thread.sleep(5000);
-			
-			//Click on create contract button
-			coreFunc.ClickOnActionButton("Create");
-			
-			System.out.println("Debug log : 4 ");
-			Thread.sleep(5000);
-			WebDriverWait contractWait = new WebDriverWait(getDriver(), 60);
-			contractWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LoadProperty.getVar("category", "element"))));
-			System.out.println("Debug log : 5 ");	
-			
-			//Enter contract data
-			//select value in category dropdown
-			List<WebElement> categoryelement = getDriver().findElements(By.xpath(LoadProperty.getVar("category", "element")));
-			for (int i = 0; i <categoryelement.size() ; i++) {
-		        WebElement citem = categoryelement.get(i);
-		        if(citem.isDisplayed()){
-		        	citem.click();
-		        	break;
-		        }	        
-		    }
-			List<WebElement> catItem=  getDriver().findElements(By.xpath("//span[@class ='x-tree-node-text '][text() = '"+category+"']"));
-			for (int i = 0; i <catItem.size() ; i++) {
-		        WebElement citem1 = catItem.get(i);
-		        if(citem1.isDisplayed()){
-		        	citem1.click();
-		        	break;
-		        }	        
-		    }
-			//span[@class ='x-tree-node-text '][text() = 'KFZ']
-			//coreFunc.SelectValueInDropdown(category);			
-			
-			//getDriver().findElement(By.name(LoadProperty.getVar("category", "element"))).sendKeys(category);
-		 	getDriver().findElement(By.name(LoadProperty.getVar("providerId", "element"))).click();
-		 	coreFunc.SelectValueInDropdown(providerName);
-			//getDriver().findElement(By.name(LoadProperty.getVar("providerId", "element"))).sendKeys(providerName);
-			getDriver().findElement(By.name(LoadProperty.getVar("productId", "element"))).click();
-			coreFunc.SelectValueInDropdown(productName);
-			//getDriver().findElement(By.name(LoadProperty.getVar("productId", "element"))).sendKeys(productName);
-			getDriver().findElement(By.name(LoadProperty.getVar("insuranceNumber", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("insuranceNumber", "element"))).sendKeys(insuranceNumber);
-			getDriver().findElement(By.name(LoadProperty.getVar("payment", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("payment", "element"))).sendKeys(payment);
-			getDriver().findElement(By.name(LoadProperty.getVar("durationMonths", "element"))).clear();
-			getDriver().findElement(By.name(LoadProperty.getVar("durationMonths", "element"))).sendKeys(duration_months);
-			*/
 			//Click on save contract button
 			coreFunc.ClickOnActionButton("Save");
 			
 			AddContractFeatures(testData);	
 			
 			testStep="Click Save button.";
-			locator=ManageLocator.getLocator("Tab.Client.Contract.Create.Button.Save");
-			//WebElement eleSaveButton=coreFunc.findElement(locator[0],locator[1]);
-			 //eleSaveButton.click();
-			//eleSaveButton.click();
+			//locator=ManageLocator.getLocator("Tab.Client.Contract.Create.Button.Save");
 			coreFunc.ClickOnActionButton("Save");
 			TestResult.addTestResult(testStep,"Passed");
 			
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 			//click on refresh button 
-			getDriver().findElement(By.xpath(LoadProperty.getVar("refreshBtn", "element"))).click();
+			WebElement refreshBtn = coreFunc.findElement("xpath",LoadProperty.getVar("refreshBtn", "element"));
+			refreshBtn.click();
 			clientWait.until(ExpectedConditions.invisibilityOfElementLocated(By.className(LoadProperty.getVar("clientGridWait", "element"))));
 			coreFunc.waitForWhile(5);
 			
-			WebElement contractcountA =  getDriver().findElement(By.xpath(LoadProperty.getVar("contractCount", "element")));
-			
+			WebElement contractcountA =coreFunc.findElement("xpath",LoadProperty.getVar("contractCount", "element")); 
 			Reporter.log("Verify Contract count or not with specified last name in clients grid");
 			System.out.println("Debug log : Contract count after adding :  "+ contractcountA.getText());
 			
 			int contractCountAfter = Integer.parseInt(contractcountA.getText());
-			
-
-			
 			if(contractCountAfter > contractCountbefore)
 			{
 				Reporter.log("Contract added successfully for client Named :  "+namefirst+" "+namelast+"  Email Id :  "+email);
@@ -1268,9 +1247,9 @@ public class AddClientContractDetails extends TestBase{
     	String testID=String.valueOf(testData[0]);
        	try
 		{	    					
-			String insuranceType=String.valueOf(testData[95]);
+			String insuranceType=String.valueOf(testData[93]);
 			
-			String testDataReference=String.valueOf(testData[97]); 
+			String testDataReference=String.valueOf(testData[94]); 
 			String testStep="";
 			if(insuranceType.length() > 0 && testDataReference.length() > 0){
 			   // Go ahead to choose insurance category and fill insurance detail on page 
@@ -1305,9 +1284,9 @@ public class AddClientContractDetails extends TestBase{
 						
 						testStep="Click Contract Data Tab.";
 						locator=ManageLocator.getLocator("Tab.Client.Contract.Create.ContractData");
-						WebElement eleClientTab=coreFunc.findElement(locator[0],locator[1]);
-						eleClientTab.click(); 
-						TestResult.addTestResult(testStep,"Passed");
+						//WebElement eleClientTab=coreFunc.findElement(locator[0],locator[1]);
+						//eleClientTab.click(); 
+						//TestResult.addTestResult(testStep,"Passed");
 					}else{
 						testStep="Fill insurance field after selecting module";
 						TestResult.addTestResult(testStep,"Failed","Unable to find mapping module in property file hence aborted the process.");
@@ -1408,4 +1387,3 @@ public class AddClientContractDetails extends TestBase{
     }
 
 }
-

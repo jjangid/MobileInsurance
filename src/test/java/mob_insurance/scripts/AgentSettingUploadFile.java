@@ -50,6 +50,8 @@ public class AgentSettingUploadFile extends TestBase{
 			}			
 		}
 		catch(Exception e){
+			TestResult.addTestResult("AgentSettingUploadFileTest failed due to error occured","Failed");
+			TestResult.appendTestResult();
 			Reporter.log("Error: Test Case failed due to error occured");
 			coreFunc.logData("AgentSettingUploadFileTest","","Failed","Error: Refer output logs for more information.",assertEnabled);
 			e.printStackTrace();

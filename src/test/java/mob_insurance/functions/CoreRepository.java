@@ -123,9 +123,9 @@ public class CoreRepository extends TestBase {
 			TestResult.addTestResult(testStep,"Passed");
 		    waitForWhile(5);	
 		    
-			isLogin=true;
 			testStep="Login into the application.";
 			TestResult.addTestResult(testStep,"Passed");
+			isLogin=true;
 						
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,14 +188,14 @@ public class CoreRepository extends TestBase {
 				 WebElement selectLanguage=findElement("xpath", locatorSelectLang);
 				 selectLanguage.click();
 				 System.out.println("Selected language..");
-//				 TestResult.addTestResult("Choose Language code as "+languageCode,"Passed");				 
-			 }else{
-				 System.out.println("Deafualted language is same as sepcified language");
-//				 TestResult.addTestResult("Choose Language code as "+languageCode,"Passed","- Defaulted language was same as specified lanaguage code in test data. Hence language code has not choosen again.");
 			 }
-		 }catch(Exception e){
+			 else
+			 {
+				 System.out.println("Deafualted language is same as sepcified language");
+			 }
+		 }
+		 catch(Exception e){
 			 System.out.println("error in language selection");
-//			 TestResult.addTestResult("Choose Language code as "+languageCode,"Failed","- Error occured while choosing another language code.");
 		     return false;
 		 }
 		 
@@ -257,7 +257,7 @@ public class CoreRepository extends TestBase {
 					value = lang.equalsIgnoreCase("DE") ? "Anlegen" :"Create";
 					break;
 				case "Edit":
-					value = lang.equalsIgnoreCase("DE") ? "ï¿½ndern" :"Edit";
+					value = lang.equalsIgnoreCase("DE") ? "Ändern" :"Edit";
 					break;
 				case "Save":
 					value = lang.equalsIgnoreCase("DE") ? "Speichern" :"Save";
@@ -269,7 +269,7 @@ public class CoreRepository extends TestBase {
 					value = lang.equalsIgnoreCase("DE") ? "Keine Daten vorhanden" :"No data to display";
 					break;
 				case "Delete":
-					value = lang.equalsIgnoreCase("DE") ? "Lï¿½schen" :"Delete";
+					value = lang.equalsIgnoreCase("DE") ? "Löschen" :"Delete";
 					break;
 				case "Send":
 					value = lang.equalsIgnoreCase("DE") ? "Senden" :"Send";
@@ -708,6 +708,9 @@ public class CoreRepository extends TestBase {
 				         
 			  case "name":
 				             return By.name(locatorValue);
+			  
+			  case "cssSelector":  			
+				  			return By.cssSelector(locatorValue); 
 				         
 		      default : return null;          
 		  }

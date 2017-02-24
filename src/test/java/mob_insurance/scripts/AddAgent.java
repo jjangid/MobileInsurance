@@ -69,32 +69,33 @@ public class AddAgent extends TestBase{
 						}
 					}
 					
-					executionResult= addAgentTestSuite(testData[tcNo]);
-					
+					executionResult= addAgentTestSuite(testData[tcNo]);					
 					if(executionResult)
 					{
-						coreFunc.logData("Add Agent Test Suite",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
+						TestResult.addTestResult("Add Agent test case "+String.valueOf(testData[tcNo][0]),"Passed");
+						coreFunc.logData("Add Agent test case",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
-					}
-					TestResult.appendTestResult();
+					}					
 				}
 				else
 				{					
 					Reporter.log("Test execution of test case "+testData[tcNo][0]+" is skipped");
+					TestResult.addTestResult("Add Agent Test Suite : "+String.valueOf(testData[tcNo][0]),"skipped");
 					System.out.println("Test execution of test case "+testData[tcNo][0]+" is skipped");					
 				}
 				
 			    Reporter.log("Test execution completed for testID: "+testData[tcNo][0]);
 			    Reporter.log("*******************************************************************************************");
+			    TestResult.appendTestResult();	
 			}
-			
-			
+					
 		}
 		catch(Exception e){
-			Reporter.log("Error: Test Case failed due to error occured");
-			coreFunc.logData("Add Agent Test Suite","","Failed","Error: Refer output logs for more information.",assertEnabled);
-			e.printStackTrace();
+			TestResult.addTestResult("Add Agent test failed due to error occured","Failed");
 			TestResult.appendTestResult();
+			Reporter.log("Error: Test Case failed due to error occured");
+			coreFunc.logData("Add Agent","","Failed","Error: Refer output logs for more information.",assertEnabled);
+			e.printStackTrace();
 		}
 	}
 	

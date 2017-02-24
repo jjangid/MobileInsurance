@@ -101,27 +101,31 @@ public class DeleteClientAndContract extends TestBase{
 					}					
 					if(DeleteContract && DeleteClient)
 					{
+						TestResult.addTestResult("DeleteClientContract Test Case : "+String.valueOf(testData[tcNo][0]),"Passed");
 						coreFunc.logData("DeleteClientContract",String.valueOf(testData[tcNo][0]),"Passed","",assertEnabled);
 						System.out.println("Test Case"+testData[tcNo][0]+" is passed.");
 					}
 					boolean needToLogOut=Boolean.valueOf(String.valueOf(testData[tcNo][6]));
 					if(needToLogOut){
 					  coreFunc.Logout();					  
-					}	
-					TestResult.appendTestResult();
+					}						
 				}
 				else
 				{					
+					TestResult.addTestResult("Test Case : "+String.valueOf(testData[tcNo][0]),"Skipped");
 					Reporter.log("Test execution of test case "+testData[tcNo][0]+" is skipped");
 					System.out.println("Test execution of test case "+testData[tcNo][0]+" is skipped");					
 				}		  			    	
 			    Reporter.log("Test execution completed for testID: "+testData[tcNo][0]);
 			    Reporter.log("*******************************************************************************************");
+			    TestResult.appendTestResult();
 			}
 			
 			
 		}
 		catch(Exception e){
+			TestResult.addTestResult("DeleteClientContract failed due to error occured","Failed");
+			TestResult.appendTestResult();
 			Reporter.log("Error: Test Case failed due to error occured");
 			coreFunc.logData("DeleteClientContract","","Failed","Error: Refer output logs for more information.",assertEnabled);
 			e.printStackTrace();

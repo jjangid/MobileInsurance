@@ -118,7 +118,8 @@ public class TestResult {
 	}
 	
 	public static void addTestResult(String... testResult){
-		 String[] result=new String[3];
+		
+		String[] result=new String[3];
 	     result[0]=testResult[0];
 	     result[1]=testResult[1];	     
 	     result[2]=testResult.length==3? testResult[2]:"";
